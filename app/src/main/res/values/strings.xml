@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Llistapp: Menú Principal</string>
+    <string name="BotoGestioAlum">Gestiona Alumnes</string>
+    <string name="BotoGestioAssig">Gestiona Assignatures</string>
+</resources>
