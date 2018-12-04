@@ -1,5 +1,21 @@
 <resources>
-    <string name="app_name">Llistapp: Menú Principal</string>
-    <string name="BotoGestioAlum">Gestiona Alumnes</string>
+    <string name="app_name">Llistapp</string>
+    <string name="tv_presentacio">Menú Principal</string>
+    <string name="BotoGestioAlum">Gestiona Estudiants</string>
     <string name="BotoGestioAssig">Gestiona Assignatures</string>
+    <string name="BotoGestioAssist">Gestiona Assistencia</string>
+    <string name="title_activity_gestiona_alumnes">Gestiona Alumnes</string>
+    <string name="title_activity_validacio_assistencia">ValidacioAssistencia</string>
+    <string name="title_activity_gestio_assignatures">GestioAssignatures</string>
+    <string name="titol_gestioAlumnes">Gestió d\'Estudiants</string>
+    <string name="help_item">Ajuda</string>
+    <string name="title_activity_edit_estudiant">EditEstudiant</string>
+    <string name="hintNom">Nom</string>
+    <string name="hintCognoms">Cognoms</string>
+    <string name="hintDNI">DNI</string>
+    <string name="hintEmail">Correu electrònic</string>
+    <string name="btnGuarda">GUARDA</string>
+    <string name="title_activity_nou_estudiant">Nou Estudiant</string>
+    <string name="action_settings">Settings</string>
+    <string name="addIcon">Afageix</string>
 </resources>

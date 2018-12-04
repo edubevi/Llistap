@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imatge_estudiant"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_infoEstudiant"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layout_infoEstudiant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imatge_estudiant"
+        app:layout_constraintEnd_toStartOf="@+id/ib_edit"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imatge_estudiant"
+        app:layout_constraintTop_toTopOf="@+id/imatge_estudiant">
+
+        <TextView
+            android:id="@+id/tv_nomEstudiant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nom Cognom1 Cognom2"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_dniEstudiant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="00000000X" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorBarraRecyvleView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/layout_infoEstudiant"
+        app:layout_constraintTop_toBottomOf="@+id/imatge_estudiant" />
+
+    <ImageButton
+        android:id="@+id/ib_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:tint="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/imatge_estudiant"
+        app:layout_constraintEnd_toStartOf="@+id/ib_delete"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/layout_infoEstudiant"
+        app:layout_constraintTop_toTopOf="@+id/imatge_estudiant"
+        app:srcCompat="@drawable/ic_edit" />
+
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:tint="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/imatge_estudiant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ib_edit"
+        app:layout_constraintTop_toTopOf="@+id/imatge_estudiant"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
+
+</android.support.constraint.ConstraintLayout>

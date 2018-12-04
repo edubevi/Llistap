@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NouEstudiant">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_fons"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/ic_launcher_background" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ci_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/no_user_logo"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ib_camara"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_camera" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.40" />
+
+        <ImageView
+            android:id="@+id/im_nom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_name" />
+
+        <EditText
+            android:id="@+id/et_nom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/hintNom"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="@+id/im_nom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/im_nom"
+            app:layout_constraintTop_toTopOf="@+id/im_nom" />
+
+        <EditText
+            android:id="@+id/et_cognoms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/hintCognoms"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/et_nom"
+            app:layout_constraintTop_toBottomOf="@+id/et_nom"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/iv_dni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_cognoms"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_dni" />
+
+        <EditText
+            android:id="@+id/et_dni"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/hintDNI"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_dni"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_dni"
+            app:layout_constraintTop_toTopOf="@+id/iv_dni" />
+
+        <ImageView
+            android:id="@+id/iv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_dni"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_mail" />
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/hintEmail"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_email"
+            app:layout_constraintTop_toTopOf="@+id/iv_email" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+
+
+</ScrollView>
