@@ -1,4 +1,4 @@
-package edu.upc.damo.llistapp;
+package edu.upc.damo.llistapp.DB;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,16 +7,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import edu.upc.damo.llistapp.Entitats.Assignatura;
+import edu.upc.damo.llistapp.Entitats.Estudiant;
 
 public class DBManager {
 
     private DBHelper dbHelper;
     private static final String TAG = "DBManager";
 
-    DBManager(Context context){
+    public DBManager(Context context){
         this.dbHelper = new DBHelper(context);
     }
 
@@ -29,38 +33,45 @@ public class DBManager {
         values.put(DBContract.Table1.COLUMN_NAME_COL1,e.getNom());
         values.put(DBContract.Table1.COLUMN_NAME_COL2,e.getCognoms());
         values.put(DBContract.Table1.COLUMN_NAME_COL3,e.getDni());
-        values.put(DBContract.Table1.COLUMN_NAME_COL4,e.getMail());
+        values.put(DBContract.Table1.COLUMN_NAME_COL4,e.getFoto());
+        values.put(DBContract.Table1.COLUMN_NAME_COL5,e.getMail());
         long res = db.insert(DBContract.Table1.TABLE_NAME,null,values);
 
-        Log.d(TAG,"insereixEstudiant" + e.getNom() + "a" + DBContract.Table1.TABLE_NAME);
+        Log.d(TAG,"inseritEstudiant" + e.getNom() + " a " + DBContract.Table1.TABLE_NAME);
         //Retornem cert si l'estudiant s'ha inserit correctament en la DB, altrment retornem fals.
         return res != -1;
     }
 
-    public void insereixAssignatura(Assignatura a, List<Estudiant> llistaEst){
+    public boolean insereixAssignatura(Assignatura a, List<Estudiant> llistaEst){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DBContract.Table2.COLUMN_NAME_COL1,a.getId());
-        values.put(DBContract.Table2.COLUMN_NAME_COL2,a.getNom());
+        values.put(DBContract.Table2.COLUMN_NAME_COL1,a.getNom());
+        values.put(DBContract.Table2.COLUMN_NAME_COL2,a.getAlias());
         //Inserim la nova fila a la taula
-        db.insert(DBContract.Table2.TABLE_NAME,null,values);
+        long res = db.insert(DBContract.Table2.TABLE_NAME,null,values);
 
         //Assignem Estudiants a la nova assignatura
         for (Estudiant e : llistaEst){
-            insereixEstudiantsAssignatura(e.getDni(), a.getId());
+            insereixEstudiantsAssignatura(e.getDni(), a.getNom());
         }
+        Log.d(TAG,"inseridaAssignatura" + a.getNom() + " a " + DBContract.Table2.TABLE_NAME);
+        return res != -1;
     }
 
-    private void insereixEstudiantsAssignatura(String dniEstudiant, int idAssignatura){
+    private void insereixEstudiantsAssignatura(String dniEstudiant, String nomAssignatura){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBContract.Table12.COLUMN_NAME_COL1,dniEstudiant);
-        values.put(DBContract.Table12.COLUMN_NAME_COL2,idAssignatura);
+        values.put(DBContract.Table12.COLUMN_NAME_COL2,nomAssignatura);
+
         //Inserim la nova fila a la taula
         db.insert(DBContract.Table12.TABLE_NAME,null,values);
-    }
+        Log.d(TAG,"inseritEstudiantAssignatura" + dniEstudiant + "-" + nomAssignatura + " a "
+                + DBContract.Table12.TABLE_NAME);
 
-    public void insereixAssistencia(Assistencia ast, Assignatura a, List<Estudiant> llistaEst){
+   }
+
+   /* public void insereixAssistencia(Assistencia ast, Assignatura a, List<Estudiant> llistaEst){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBContract.Table3.COLUMN_NAME_COL1, ast.getData());
@@ -72,37 +83,40 @@ public class DBManager {
         for (Estudiant e : llistaEst){
             insereixEstudiantsAssistencia(e.getDni(), ast.getData());
         }
-    }
+    }*/
 
-    private void insereixEstudiantsAssistencia(String idEstudiant, long idAssistencia){
+/*    private void insereixEstudiantsAssistencia(String idEstudiant, long idAssistencia){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBContract.Table13.COLUMN_NAME_COL1,idEstudiant);
         values.put(DBContract.Table13.COLUMN_NAME_COL2,idAssistencia);
         //Inserim la nova fila a la taula
         db.insert(DBContract.Table3.TABLE_NAME,null,values);
-    }
-
+    }*/
     //Updates
 
     /* Com que es poden modificar diferents camps d'un Estudiant, modifiquem directament tots els
     camps passant un nou objecte Estudiant */
-    public void updateEstudiant(Estudiant old, Estudiant nou){
+    public boolean updateEstudiant(Estudiant old_est, Estudiant new_est){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(DBContract.Table1.COLUMN_NAME_COL1, nou.getNom());
-        values.put(DBContract.Table1.COLUMN_NAME_COL2, nou.getCognoms());
-        values.put(DBContract.Table1.COLUMN_NAME_COL3, nou.getDni());
-        values.put(DBContract.Table1.COLUMN_NAME_COL4, nou.getMail());
+        values.put(DBContract.Table1.COLUMN_NAME_COL1, new_est.getNom());
+        values.put(DBContract.Table1.COLUMN_NAME_COL2, new_est.getCognoms());
+        values.put(DBContract.Table1.COLUMN_NAME_COL3, new_est.getDni());
+        values.put(DBContract.Table1.COLUMN_NAME_COL4, new_est.getFoto());
+        values.put(DBContract.Table1.COLUMN_NAME_COL5, new_est.getMail());
 
         //Actualitzem la Base de dades amb els nous valors.
-        db.update(DBContract.Table1.TABLE_NAME, values,
+        long res = db.update(DBContract.Table1.TABLE_NAME, values,
                 DBContract.Table1.COLUMN_NAME_COL3 + "=?",
-                new String[] {old.getDni()} );
+                new String[] {old_est.getDni()} );
+
+        Log.d(TAG,"updateEstudiant" + new_est.getDni() + "a" + DBContract.Table1.TABLE_NAME);
+        return res != -1;
     }
 
-    public void updateAssignatura(String nom, int id){
+    /*public void updateAssignatura(String nom, int id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -114,7 +128,7 @@ public class DBManager {
                 new String[] {Integer.toString(id)} );
     }
 
-    public void updateEstudiantAssistencia(String idEstudiant, long idAssistencia, Boolean present){
+   /* public void updateEstudiantAssistencia(String idEstudiant, long idAssistencia, Boolean present){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -125,33 +139,33 @@ public class DBManager {
                 DBContract.Table13.COLUMN_NAME_COL1 + "=? AND "
                         + DBContract.Table13.COLUMN_NAME_COL2 + "=?", new String[]
                         {idEstudiant, Long.toString(idAssistencia)} );
-    }
+    }*/
 
     // Deletes
 
     public void deleteEstudiant(String dniEstudiant){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(DBContract.Table1.TABLE_NAME,DBContract.Table1.COLUMN_NAME_COL3 + "=?",
+        db.delete(DBContract.Table1.TABLE_NAME, DBContract.Table1.COLUMN_NAME_COL3 + "=?",
                 new String[] {dniEstudiant});
 
         db.close();
     }
 
-    public void deleteAssignatura(int idAssignatura){
+    public void deleteAssignatura(String nomAssignatura){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DBContract.Table2.TABLE_NAME,DBContract.Table2.COLUMN_NAME_COL1 + "=?",
-                new String[] {Integer.toString(idAssignatura)});
+                new String[] {nomAssignatura});
 
         db.close();
     }
 
-    public void deleteAssistencia(long idAssistencia){
+    /*public void deleteAssistencia(long idAssistencia){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DBContract.Table3.TABLE_NAME,DBContract.Table3.COLUMN_NAME_COL1 + "=?",
                 new String[] {Long.toString(idAssistencia)});
 
         db.close();
-    }
+    }*/
 
     //Queries
     public Estudiant getEstudiant(String dniEstudiant) {
@@ -163,7 +177,6 @@ public class DBManager {
 
         if (cursor != null) {
             cursor.moveToFirst();
-            e = new Estudiant();
             e.setNom(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL1)));
             e.setCognoms(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL2)));
             e.setDni(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL3)));
@@ -194,12 +207,12 @@ public class DBManager {
         return mapEst;
     }
 
-    public List<Estudiant> getLlistaEstudiants(){
+    public List<Estudiant> getEstudiantsList(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Estudiant> list = new ArrayList<Estudiant>();
 
         Cursor cursor = db.query(DBContract.Table1.TABLE_NAME, null, null,
-                null, null, null, "dni ASC");
+                null, null, null, "cognoms ASC");
         if (cursor != null){
             if (cursor.moveToFirst()){
                 do {
@@ -207,37 +220,22 @@ public class DBManager {
                     e.setNom(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL1)));
                     e.setCognoms(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL2)));
                     e.setDni(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL3)));
-                    e.setMail(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL4)));
+                    byte[] image = cursor.getBlob(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL4));
+                    e.setFoto(image);
+                    //e.setFoto(cursor.getBlob(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL4)));
+                    e.setMail(cursor.getString(cursor.getColumnIndex(DBContract.Table1.COLUMN_NAME_COL5)));
                     list.add(e);
                 } while (cursor.moveToNext());
             }
         }
+        Collections.sort(list); //Ordenem la llista per ordre de cognoms
         return list;
 
     }
 
-    public List<String> getEstudiantsAssignatura(int idAssignatura){
+    public List<Assignatura> getAssignaturesList(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        List<String> list = new ArrayList<String>();
-
-        Cursor cursor = db.query(DBContract.Table12.TABLE_NAME, new String[] {
-                DBContract.Table12.COLUMN_NAME_COL1}, DBContract.Table12.COLUMN_NAME_COL2 +
-                "=?", new String[] {Integer.toString(idAssignatura)}, null, null,null);
-
-        if (cursor != null){
-            if (cursor.moveToFirst()){
-                do {
-                    String value = cursor.getString(cursor.getColumnIndex(DBContract.Table12.COLUMN_NAME_COL1));
-                    list.add(value);
-                } while (cursor.moveToNext());
-            }
-        }
-        return list;
-    }
-
-    public Map<Integer, Assignatura> getAssignatures(){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Map<Integer, Assignatura> mapAssig = new HashMap<Integer, Assignatura>();
+        List<Assignatura> list = new ArrayList<Assignatura>();
 
         Cursor cursor = db.query(DBContract.Table2.TABLE_NAME, null, null,
                 null, null, null, "nom ASC");
@@ -246,16 +244,35 @@ public class DBManager {
             if (cursor.moveToFirst()){
                 do {
                     Assignatura a = new Assignatura();
-                    a.setId(cursor.getInt(cursor.getColumnIndex(DBContract.Table2.COLUMN_NAME_COL1)));
-                    a.setNom(cursor.getString(cursor.getColumnIndex(DBContract.Table2.COLUMN_NAME_COL2)));
-                    mapAssig.put(a.getId(), a);
+                    a.setNom(cursor.getString(cursor.getColumnIndex(DBContract.Table2.COLUMN_NAME_COL1)));
+                    a.setAlias(cursor.getString(cursor.getColumnIndex(DBContract.Table2.COLUMN_NAME_COL2)));
+                    list.add(a);
                 } while (cursor.moveToNext());
             }
         }
-        return mapAssig;
+        return list;
     }
 
-    public List<Long> getAssistenciesAssignatura(int idAssignatura) {
+    public List<Estudiant> getEstudiantsAssignaturaList(String nomAssignatura){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Estudiant> list = new ArrayList<Estudiant>();
+
+        Cursor cursor = db.query(DBContract.Table12.TABLE_NAME, new String[] {
+                DBContract.Table12.COLUMN_NAME_COL1}, DBContract.Table12.COLUMN_NAME_COL2 +
+                "=?", new String[] {nomAssignatura}, null, null,"idEstudiant ASC");
+
+        if (cursor != null){
+            if (cursor.moveToFirst()){
+                do {
+                    Estudiant e = getEstudiant(cursor.getString(cursor.getColumnIndex(DBContract.Table12.COLUMN_NAME_COL1)));
+                    list.add(e);
+                } while (cursor.moveToNext());
+            }
+        }
+        return list;
+    }
+
+   /* public List<Long> getAssistenciesAssignatura(int idAssignatura) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Long> list = new ArrayList<Long>();
 
@@ -272,5 +289,5 @@ public class DBManager {
             }
         }
         return list;
-    }
+    }*/
 }

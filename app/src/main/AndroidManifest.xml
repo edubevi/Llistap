@@ -25,17 +25,17 @@
         <activity android:name=".MenuPrincipal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".GestioAssignatures"
-            android:label="@string/title_activity_gestio_assignatures"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GestioEstudiants"
             android:parentActivityName=".MenuPrincipal"/>
-        <activity android:name=".NouEstudiant"
+        <activity
+            android:name=".GestioEstudiants"
+            android:parentActivityName=".MenuPrincipal"/>
+        <activity
+            android:name=".AddEditEstudiant"
             android:parentActivityName=".GestioEstudiants" />
     </application>
 

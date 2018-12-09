@@ -9,6 +9,7 @@
     <string name="title_activity_gestio_assignatures">GestioAssignatures</string>
     <string name="titol_gestioAlumnes">Gestió d\'Estudiants</string>
     <string name="help_item">Ajuda</string>
+    <string name="search_item">Cerca</string>
     <string name="title_activity_edit_estudiant">EditEstudiant</string>
     <string name="hintNom">Nom</string>
     <string name="hintCognoms">Cognoms</string>
@@ -18,4 +19,11 @@
     <string name="title_activity_nou_estudiant">Nou Estudiant</string>
     <string name="action_settings">Settings</string>
     <string name="addIcon">Afageix</string>
+    <string name="aliasAssig">DAMO</string>
+    <string name="nomAssig">Desenvolupament d\'Aplicacions Mòbils</string>
+    <string name="nomEstudiant">Nom Cognom1 Cognom2</string>
+    <string name="dniEstudiant">00000000X</string>
+    <string name="hintNomAssignatura">Nom de l\'Assignatura</string>
+    <string name="tv_matricualts">Escull alumnes matriculats:</string>
+    <string name="hintAliasAssignatura">Alias o nom simplificat</string>
 </resources>

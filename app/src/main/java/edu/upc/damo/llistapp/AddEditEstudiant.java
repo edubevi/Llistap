@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -18,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -30,21 +31,22 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import edu.upc.damo.llistapp.Entitats.Estudiant;
 
-public class NouEstudiant extends AppCompatActivity {
+public class AddEditEstudiant extends AppCompatActivity {
 
-    private final int FOTO_CAMERA = 1 , FOTO_GALERIA = 2;
+    private final int FOTO_CAMERA = 1, FOTO_GALERIA = 2;
+    boolean editActivity = false;
+
     ImageButton buto_camara;
     EditText nom, cognoms, dni, correu;
     CircleImageView fotoEstudiant;
-    Estudiant nouEstudiant;
-    DBManager db;
+    Estudiant estudiant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Nou Estudiants");
-        setContentView(R.layout.activity_nou_estudiant);
+        setContentView(R.layout.activity_add_estudiant);
         inicialitza();
     }
 
@@ -58,18 +60,30 @@ public class NouEstudiant extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.action_add:
-                boolean campsBuits = comprovaCampsBuits();
-                if(campsBuits) missatgeToast("Cal omplir tots els camps");
+                boolean emptyFields = checkEmptyFields();
+                if(emptyFields) toastMessage("Cal omplir tots els camps");
                 else {
-                    nouEstudiant = new Estudiant();
-                    nouEstudiant.setNom(nom.getText().toString());
-                    nouEstudiant.setCognoms(cognoms.getText().toString());
-                    nouEstudiant.setDni(dni.getText().toString());
-                    nouEstudiant.setMail(correu.getText().toString());
-                    afageixDada(nouEstudiant);
-                    //Tornem a l'activity Gestio Alumnes
-                    finish();
-                    //finishActivity();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    Bitmap fotoBmp = ((BitmapDrawable) fotoEstudiant.getDrawable()).getBitmap();
+                    fotoBmp.compress(Bitmap.CompressFormat.PNG,100, baos);
+                    byte[] fotoByteArray = baos.toByteArray();
+                    Intent resultat = new Intent();
+                    resultat.putExtra(GestioEstudiants.EXTRA_NOM,nom.getText().toString());
+                    resultat.putExtra(GestioEstudiants.EXTRA_COGNOMS,cognoms.getText().toString());
+                    resultat.putExtra(GestioEstudiants.EXTRA_DNI,dni.getText().toString());
+                    resultat.putExtra(GestioEstudiants.EXTRA_MAIL,correu.getText().toString());
+                    resultat.putExtra(GestioEstudiants.EXTRA_FOTO,fotoByteArray );
+
+                    if(editActivity){
+                        /* Estem editant un estudiant, tornem a enviar el index del estudiant dins
+                        la llistaEstudiants del adapter.*/
+                        Intent i = getIntent();
+                        resultat.putExtra(GestioEstudiants.EXTRA_POS,
+                                i.getIntExtra(GestioEstudiants.EXTRA_POS,0));
+                    }
+
+                    setResult(RESULT_OK, resultat);
+                    finish(); //Tornem a l'activity Gestio Alumnes
                 }
                 return true;
         }
@@ -83,7 +97,24 @@ public class NouEstudiant extends AppCompatActivity {
         dni = (EditText) findViewById(R.id.et_dni);
         correu = (EditText) findViewById(R.id.et_email);
         fotoEstudiant = (CircleImageView) findViewById(R.id.ci_avatar);
-        db = (DBManager) new DBManager(this);
+
+        Intent intent = getIntent();
+        /* Si el intent te un extra d'un objecte de tipus estudiant, vol dir que l'activity
+        sera d'edicio d'un estudiant ja creat. Capturem els seus atributs i els mostrem en
+        els seus camps EditText corresponents. Si no te cap extr voldrar dir que l'activity
+        sera de creacio d'un nou estudiant,*/
+        if(intent.hasExtra(GestioEstudiants.EXTRA_NOM)){
+            setTitle("Edit Estudiant");
+            editActivity = true;
+            nom.setText(intent.getStringExtra(GestioEstudiants.EXTRA_NOM));
+            cognoms.setText(intent.getStringExtra(GestioEstudiants.EXTRA_COGNOMS));
+            dni.setText(intent.getStringExtra(GestioEstudiants.EXTRA_DNI));
+            correu.setText(intent.getStringExtra(GestioEstudiants.EXTRA_MAIL));
+            byte[] byteArray = intent.getByteArrayExtra(GestioEstudiants.EXTRA_FOTO);
+            Bitmap toBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+            fotoEstudiant.setImageBitmap(toBitmap);
+        }
+        else setTitle("Nou Estudiant");
 
         buto_camara.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,10 +155,10 @@ public class NouEstudiant extends AppCompatActivity {
                 });
                 dialegFoto.show();
             }
-            else missatgeToast("Sense permisos de camera");
+            else toastMessage("Sense permisos de camera");
         }
         catch (Exception e){
-            missatgeToast("Error de permisos");
+            toastMessage("Error de permisos");
             e.printStackTrace();
         }
     }
@@ -143,13 +174,12 @@ public class NouEstudiant extends AppCompatActivity {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dataUri);
                         String path = saveImage(bitmap);
-                        missatgeToast("Imatge guardada!");
                         fotoEstudiant.setImageBitmap(bitmap);
-                        //nouEstudiant.setFoto();
+                        //estudiant.setFoto();
                     }
                     catch (IOException e){
                         e.printStackTrace();
-                        missatgeToast("Error!");
+                        toastMessage("Error!");
                     }
                 }
             }
@@ -157,7 +187,7 @@ public class NouEstudiant extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 fotoEstudiant.setImageBitmap(thumbnail);
                 saveImage(thumbnail);
-                missatgeToast("Imatge Guardada!");
+                toastMessage("Imatge Guardada!");
             }
         }
     }
@@ -165,7 +195,7 @@ public class NouEstudiant extends AppCompatActivity {
     private String saveImage(Bitmap bitmap){
         String absPath = "";
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault()).format(new Date());
         File dstPath = new File(Environment.getExternalStorageDirectory() +
                 "/" + getString(R.string.app_name)); //Director de desti de les imatges
@@ -192,31 +222,23 @@ public class NouEstudiant extends AppCompatActivity {
     /* Metode que crea un nou intent que obre la galeria d'imatges del dispositiu */
     private void fotoGaleria(){
         Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, FOTO_GALERIA);
     }
 
     /* Metode que crea un nou intent que obre la camera del dispositiu */
     private void fotoCamera(){
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, FOTO_CAMERA);
     }
 
 
     // Funcions auxiliars
-    private void afageixDada(Estudiant estudiant){
-        boolean inserData = db.insereixEstudiant(estudiant);
-        if(inserData){
-            missatgeToast("Estudiant afegit correctament");
-        }
-        else {
-            missatgeToast("ERROR al afegir Estudiant");
-        }
-    }
-    private void missatgeToast(String missatge){
+
+    private void toastMessage(String missatge){
         Toast.makeText(this,missatge,Toast.LENGTH_SHORT).show();
     }
-    private boolean comprovaCampsBuits(){
+    private boolean checkEmptyFields(){
         return nom.getText().length() == 0 || cognoms.getText().length() == 0
                 || dni.getText().length() == 0 || correu.getText().length() == 0;
     }
