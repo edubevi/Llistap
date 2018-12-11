@@ -24,7 +24,7 @@ public class AdapterAssignatures extends RecyclerView.Adapter<AdapterAssignature
     private Filter mFilterList = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Assignatura> filteredList = new ArrayList<Assignatura>();
+            List<Assignatura> filteredList = new ArrayList<>();
             if(constraint == null || constraint.length() == 0) {
                 //Si no s'escriu cap patro de filtre en el quadre de cerca, retornem totes les assignatures
                 filteredList.addAll(mListAssignaturesFull);
@@ -60,16 +60,16 @@ public class AdapterAssignatures extends RecyclerView.Adapter<AdapterAssignature
 
     public static class ViewHolderAssignatures extends RecyclerView.ViewHolder {
 
-        public TextView mTValias, mTVnom;
-        public ImageButton mIBdelete;
-        public CardView mCardLayout;
+        private TextView mTValias, mTVnom;
+        private ImageButton mIBdelete;
+        //private CardView mCardLayout;
 
         public ViewHolderAssignatures(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mTValias = (TextView) itemView.findViewById(R.id.tv_alias);
-            mTVnom = (TextView) itemView.findViewById(R.id.tv_nomAssignatura);
-            mCardLayout = (CardView) itemView.findViewById(R.id.cardLayoutAssig);
-            mIBdelete = (ImageButton) itemView.findViewById(R.id.ib_deleteAssignatura);
+            mTValias = itemView.findViewById(R.id.tv_alias);
+            mTVnom = itemView.findViewById(R.id.tv_nomAssignatura);
+            //mCardLayout = (CardView) itemView.findViewById(R.id.cardLayoutAssig);
+            mIBdelete = itemView.findViewById(R.id.ib_deleteAssignatura);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,8 +95,13 @@ public class AdapterAssignatures extends RecyclerView.Adapter<AdapterAssignature
 
     public AdapterAssignatures(List<Assignatura> list) {
         this.mListAssignatures = list; //Referencia a la llista de GestioAssignatures
-        this.mListAssignaturesFull = new ArrayList<Assignatura>(mListAssignatures);
+        this.mListAssignaturesFull = new ArrayList<>(mListAssignatures);
     }
+
+    public void updateFullList() {
+        mListAssignaturesFull = new ArrayList<>(mListAssignatures);
+    }
+
 
     @Override
     public ViewHolderAssignatures onCreateViewHolder(ViewGroup parent, int viewType) {

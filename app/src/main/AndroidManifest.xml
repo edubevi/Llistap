@@ -32,6 +32,9 @@
             android:name=".GestioAssignatures"
             android:parentActivityName=".MenuPrincipal"/>
         <activity
+            android:name=".AddEditAssignatura"
+            android:parentActivityName=".GestioAssignatures"/>
+        <activity
             android:name=".GestioEstudiants"
             android:parentActivityName=".MenuPrincipal"/>
         <activity

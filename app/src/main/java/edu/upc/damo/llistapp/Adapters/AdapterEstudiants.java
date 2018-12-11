@@ -27,7 +27,10 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
     private List<Estudiant> mListEstudiants;
     private List<Estudiant> mListEstudiantsFull;
     private OnItemClickListener mListener;
-    private Context mContext;
+
+    public void updateFullList() {
+        mListEstudiantsFull = new ArrayList<>(mListEstudiants);
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -39,22 +42,22 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
 
     public static class ViewHolderEstudiants extends RecyclerView.ViewHolder {
 
-        public CircleImageView mCVavatar;
-        public ImageButton mIBdelete;
-        public ImageButton mIBedit;
-        public TextView mTVnom, mTVdni;
-        public CardView mCardLayout;
+        private CircleImageView mCVavatar;
+        private ImageButton mIBdelete;
+        private ImageButton mIBedit;
+        private TextView mTVnom, mTVdni;
+        //private CardView mCardLayout;
 
         public ViewHolderEstudiants(View itemView, final OnItemClickListener listener){
             super(itemView);
-            mCVavatar = (CircleImageView) itemView.findViewById(R.id.imatge_estudiant);
-            mTVnom = (TextView) itemView.findViewById(R.id.tv_nomEstudiant);
-            mTVdni = (TextView) itemView.findViewById(R.id.tv_dniEstudiant);
-            mCardLayout = (CardView) itemView.findViewById(R.id.cardLayout);
-            mIBdelete = (ImageButton) itemView.findViewById(R.id.ib_delete);
-            mIBedit = (ImageButton) itemView.findViewById(R.id.ib_edit);
+            mCVavatar = itemView.findViewById(R.id.imatge_estudiant);
+            mTVnom = itemView.findViewById(R.id.tv_nomEstudiant);
+            mTVdni = itemView.findViewById(R.id.tv_dniEstudiant);
+            //mCardLayout = itemView.findViewById(R.id.cardLayout);
+            mIBdelete = itemView.findViewById(R.id.ib_delete);
+            mIBedit = itemView.findViewById(R.id.ib_edit);
 
-/*            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener != null){
@@ -64,7 +67,7 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
                         }
                     }
                 }
-            });*/
+            });
 
             mIBdelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,11 +96,11 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
         }
     }
 
-    public AdapterEstudiants(List<Estudiant> llista, Context context) {
+    public AdapterEstudiants(List<Estudiant> llista) {
         this.mListEstudiants = llista; //Referencia a la llista de GestioEstudiants
         this.mListEstudiantsFull = new ArrayList<>(mListEstudiants);
-        this.mContext = context;
     }
+
 
     @Override
     public ViewHolderEstudiants onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -116,9 +119,9 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
         holder.mCVavatar.setImageBitmap(byteArraytoBitmap(est.getFoto()));
     }
 
-    public void updateLlistaPlena() {
+   /* public void updateLlistaPlena() {
         this.mListEstudiantsFull = new ArrayList<>(mListEstudiants);
-    }
+    }*/
 
     @Override
     public int getItemCount() { return mListEstudiants.size();}
@@ -129,7 +132,7 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
     private Filter llistaFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Estudiant> filteredList = new ArrayList<Estudiant>();
+            List<Estudiant> filteredList = new ArrayList<>();
             if(constraint == null || constraint.length() == 0) {
                 //Retornem la llista sencera. No s'ha escrit res en el editText de cerca.
                 filteredList.addAll(mListEstudiantsFull);
@@ -158,8 +161,7 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
     };
 
     //Funcions Auxiliars
-    public Bitmap byteArraytoBitmap(byte[] byteArray){
-        Bitmap toBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-        return toBitmap;
+    private Bitmap byteArraytoBitmap(byte[] byteArray){
+        return BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
     }
 }
