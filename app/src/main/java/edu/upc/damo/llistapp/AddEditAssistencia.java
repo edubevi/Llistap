@@ -28,6 +28,7 @@ public class AddEditAssistencia extends AppCompatActivity {
     private Set<String> mAssistents = new HashSet<>();
     private boolean editActivity = false;
     private int mIdAssistencia;
+    private Long mDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -50,6 +51,7 @@ public class AddEditAssistencia extends AppCompatActivity {
                 //Enviem el dni dels estudiants presents i absents amb una ArrayList
                 ArrayList<String> dniPresents = new ArrayList<>(mAssistents);
                 resultat.putStringArrayListExtra(GestioAssistencies.EXTRA_PRESENTS, dniPresents);
+                resultat.putExtra(GestioAssistencies.EXTRA_DATE_ASSISTENCIA, mDate);
                 ArrayList<String> dniAbsents = new ArrayList<>();
                 for (Estudiant e: mListEstudiants){
                     String dni = e.getDni();
@@ -74,9 +76,9 @@ public class AddEditAssistencia extends AppCompatActivity {
         Intent intent = getIntent();
         TextView mAliasAssig = findViewById(R.id.tv_assigAssist);
         mAliasAssig.setText(intent.getStringExtra(GestioAssignatures.EXTRA_ALIAS_ASSIG));
-        TextView mDate = findViewById(R.id.tv_dataAssist);
-        Long date = intent.getLongExtra(GestioAssistencies.EXTRA_DATE_ASSISTENCIA,0);
-        mDate.setText(getFormatDate(date));
+        TextView tv_date = findViewById(R.id.tv_dataAssist);
+        mDate = intent.getLongExtra(GestioAssistencies.EXTRA_DATE_ASSISTENCIA,0);
+        tv_date.setText(getFormatDate(mDate));
         String mAssignatura = intent.getStringExtra(GestioAssignatures.EXTRA_NOM_ASSIG);
         mIdAssistencia = intent.getIntExtra(GestioAssistencies.EXTRA_ID_ASSISTENCIA,0);
         mListEstudiants = new ArrayList<>(mCon.getEstudiantsAssignaturaList(mAssignatura));
@@ -91,7 +93,7 @@ public class AddEditAssistencia extends AppCompatActivity {
         }
         else {
             setTitle("Nova Assistència");
-            mInfoAssistencia.setText(getString(R.string.tv_info_assistents, 0,mAssistents.size()));
+            mInfoAssistencia.setText(getString(R.string.tv_info_assistents, 0,mListEstudiants.size()));
         }
         initRecycleView();
     }
@@ -117,14 +119,9 @@ public class AddEditAssistencia extends AppCompatActivity {
 
     //Funcions Auxiliars
     private String getFormatDate(long date){
-
         SimpleDateFormat sdf = new SimpleDateFormat("EE d-MM-y H:m:s", new Locale("ca","ES"));
         Date formattedDate = new java.util.Date(date);
-        return sdf.format(formattedDate);/*
-        long dv = Long.valueOf(Long.toString(date))*1000;// its need to be in milisecond
-        Date df = new java.util.Date(dv);
-        String vv = new SimpleDateFormat("EE d-MM-y  H:m:s").format(df);
-        return vv;*/
+        return sdf.format(formattedDate);
     }
 
     private void updateInfoAssistencia(){

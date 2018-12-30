@@ -93,7 +93,7 @@ public class AdapterAssistencies extends RecyclerView.Adapter<
     //Auxiliar methods
     private String getFormatDate(long date){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EE d MM y H:m:s", new Locale("ca","ES"));
+        SimpleDateFormat sdf = new SimpleDateFormat("EE d-MM-y H:m:s", new Locale("ca","ES"));
         Date formattedDate = new Date(date);
         return sdf.format(formattedDate);
     }
