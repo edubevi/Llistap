@@ -3,26 +3,22 @@ package edu.upc.damo.llistapp.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.upc.damo.llistapp.DB.DBManager;
 import edu.upc.damo.llistapp.Entitats.Estudiant;
 import edu.upc.damo.llistapp.R;
 
-public class AdapterEstudiantsCheckbox extends RecyclerView.Adapter<AdapterEstudiantsCheckbox.ViewHolderEstudiantsCheckbox> {
+public class AdapterEstudiantsAssignatura extends RecyclerView.Adapter<
+        AdapterEstudiantsAssignatura.ViewHolderEstudiantsAssignatura> {
 
     private List<Estudiant> mLlistaEstudiants;
     private OnItemClickListener mListener;
@@ -30,19 +26,18 @@ public class AdapterEstudiantsCheckbox extends RecyclerView.Adapter<AdapterEstud
     private Context mContext;
 
     public interface OnItemClickListener {
-        //void onItemClick(int position);
         void onCheckBox(int position, boolean checked);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) { this.mListener = listener; }
 
-    public static class ViewHolderEstudiantsCheckbox extends RecyclerView.ViewHolder{
+    public static class ViewHolderEstudiantsAssignatura extends RecyclerView.ViewHolder{
 
         private CircleImageView mCVavatar;
         private CheckBox mCheck;
         private TextView mTVnom, mTVdni;
 
-        public ViewHolderEstudiantsCheckbox(View itemView, final OnItemClickListener listener) {
+        public ViewHolderEstudiantsAssignatura(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mCVavatar = itemView.findViewById(R.id.ci_listEstCheck);
             mCheck = itemView.findViewById(R.id.cb_listEstCheck);
@@ -65,21 +60,21 @@ public class AdapterEstudiantsCheckbox extends RecyclerView.Adapter<AdapterEstud
         }
     }
 
-    public AdapterEstudiantsCheckbox(List<Estudiant> list, Context context, String nomAssignatura) {
+    public AdapterEstudiantsAssignatura(List<Estudiant> list, Context context, String nomAssignatura) {
         this.mLlistaEstudiants = list;
         this.mContext = context;
         this.mNomAssignatura = nomAssignatura;
     }
 
     @Override
-    public ViewHolderEstudiantsCheckbox onCreateViewHolder(ViewGroup parent, int viewType){
+    public ViewHolderEstudiantsAssignatura onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.layout_list_estudiants_checkbox, parent, false);
-        return new ViewHolderEstudiantsCheckbox(view, mListener);
+        return new ViewHolderEstudiantsAssignatura(view, mListener);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderEstudiantsCheckbox holder, int position) {
+    public void onBindViewHolder(ViewHolderEstudiantsAssignatura holder, int position) {
 
         Estudiant est = mLlistaEstudiants.get(position);
         String nomComplet = est.getNom() + " " + est.getCognoms();

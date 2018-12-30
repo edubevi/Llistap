@@ -16,7 +16,8 @@ import java.util.List;
 import edu.upc.damo.llistapp.Entitats.Assignatura;
 import edu.upc.damo.llistapp.R;
 
-public class AdapterAssignatures extends RecyclerView.Adapter<AdapterAssignatures.ViewHolderAssignatures> implements Filterable {
+public class AdapterAssignatures extends RecyclerView.Adapter<
+        AdapterAssignatures.ViewHolderAssignatures> implements Filterable {
 
     private List<Assignatura> mListAssignatures;
     private List<Assignatura> mListAssignaturesFull;
@@ -62,13 +63,11 @@ public class AdapterAssignatures extends RecyclerView.Adapter<AdapterAssignature
 
         private TextView mTValias, mTVnom;
         private ImageButton mIBdelete;
-        //private CardView mCardLayout;
 
         public ViewHolderAssignatures(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mTValias = itemView.findViewById(R.id.tv_alias);
             mTVnom = itemView.findViewById(R.id.tv_nomAssignatura);
-            //mCardLayout = (CardView) itemView.findViewById(R.id.cardLayoutAssig);
             mIBdelete = itemView.findViewById(R.id.ib_deleteAssignatura);
 
             itemView.setOnClickListener(new View.OnClickListener() {

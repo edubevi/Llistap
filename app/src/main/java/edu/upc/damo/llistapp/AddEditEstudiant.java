@@ -37,11 +37,11 @@ public class AddEditEstudiant extends AppCompatActivity {
 
     private final int FOTO_CAMERA = 1, FOTO_GALERIA = 2;
     private boolean editActivity = false;
+    private String CAMERA_PERMISION = Manifest.permission.CAMERA;
 
     private ImageButton buto_camara;
     private EditText nom, cognoms, dni, correu;
     private CircleImageView fotoEstudiant;
-    private Estudiant estudiant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

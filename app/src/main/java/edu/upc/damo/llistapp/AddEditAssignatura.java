@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -16,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.upc.damo.llistapp.Adapters.AdapterEstudiantsCheckbox;
+import edu.upc.damo.llistapp.Adapters.AdapterEstudiantsAssignatura;
 import edu.upc.damo.llistapp.DB.DBManager;
 import edu.upc.damo.llistapp.Entitats.Estudiant;
 
@@ -24,9 +23,9 @@ public class AddEditAssignatura extends AppCompatActivity {
 
     private EditText mNomAssig, mAliasAssig;
     private DBManager mCon;
-    private AdapterEstudiantsCheckbox mAdapter;
+    private AdapterEstudiantsAssignatura mAdapter;
     private List<Estudiant> mListEstudiantCb;
-    Set<String> mMatriculats = new HashSet<>();
+    private Set<String> mMatriculats = new HashSet<>();
     private boolean editActivity = false;
 
     @Override
@@ -95,10 +94,11 @@ public class AddEditAssignatura extends AppCompatActivity {
 
         mListEstudiantCb = new ArrayList<>();
         mListEstudiantCb = mCon.getEstudiantsList();
-        mAdapter = new AdapterEstudiantsCheckbox(mListEstudiantCb, getApplicationContext(),
+        mAdapter = new AdapterEstudiantsAssignatura(mListEstudiantCb, getApplicationContext(),
                     mNomAssig.getText().toString());
         RVestudiantsCb.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new AdapterEstudiantsCheckbox.OnItemClickListener() {
+
+        mAdapter.setOnItemClickListener(new AdapterEstudiantsAssignatura.OnItemClickListener() {
 
             @Override
             public void onCheckBox(int position, boolean checked) {

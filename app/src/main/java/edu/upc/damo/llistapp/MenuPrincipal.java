@@ -8,54 +8,53 @@ import android.widget.Button;
 
 public class MenuPrincipal extends AppCompatActivity {
 
-    Button alumnes, assignatures, assistencia;
+    private static final int ACT_ESTUDIANTS = 1, ACT_ASSIGNATURES = 2, ACT_ASSISTENCIES = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
-        inicialitza();
+        init();
     }
 
-    private void inicialitza(){
-        alumnes = (Button)findViewById(R.id.btn_estudiants);
-        alumnes.setOnClickListener(new View.OnClickListener() {
+    private void init(){
+        Button btn_Alumnes = findViewById(R.id.btn_estudiants);
+        btn_Alumnes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostraGestioAlumnes(v);
+                initNewActivity(ACT_ESTUDIANTS);
             }
         });
 
-        assignatures = (Button)findViewById(R.id.btn_assign);
-        assignatures.setOnClickListener(new View.OnClickListener() {
+        Button btn_Assignatures = findViewById(R.id.btn_assign);
+        btn_Assignatures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostraGestioAssignatures(v);
+                initNewActivity(ACT_ASSIGNATURES);
             }
         });
 
-        assistencia = (Button)findViewById(R.id.btn_assist);
-        assistencia.setOnClickListener(new View.OnClickListener() {
+        Button btn_Assistencies = findViewById(R.id.btn_assist);
+        btn_Assistencies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostraGestioAssistencia(v);
+                initNewActivity(ACT_ASSISTENCIES);
             }
         });
     }
 
-    private void mostraGestioAlumnes(View v){
-        Intent i = new Intent(MenuPrincipal.this,GestioEstudiants.class);
+    private void initNewActivity(int activity){
+        Intent i = new Intent();
+        switch (activity){
+            case ACT_ESTUDIANTS:
+                i.setClass(MenuPrincipal.this, GestioEstudiants.class);
+                break;
+            case ACT_ASSIGNATURES:
+                i.setClass(MenuPrincipal.this, GestioAssignatures.class);
+                break;
+            case ACT_ASSISTENCIES:
+                i.setClass(MenuPrincipal.this, GestioAssistencies.class);
+        }
         startActivity(i);
     }
-
-    private void mostraGestioAssignatures(View v){
-        Intent i = new Intent(MenuPrincipal.this,GestioAssignatures.class);
-        startActivity(i);
-    }
-
-    private void mostraGestioAssistencia(View v){
-        //Intent i = new Intent(MenuPrincipal.this,.class);
-        //startActivity(i);
-    }
-
 }

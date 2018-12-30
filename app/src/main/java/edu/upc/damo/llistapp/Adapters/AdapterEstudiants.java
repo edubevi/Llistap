@@ -33,7 +33,6 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
         void onDeleteClick(int position);
         void onEditClick(int position);
     }
@@ -56,18 +55,6 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
             //mCardLayout = itemView.findViewById(R.id.cardLayout);
             mIBdelete = itemView.findViewById(R.id.ib_delete);
             mIBedit = itemView.findViewById(R.id.ib_edit);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(listener != null){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            listener.onItemClick(position);
-                        }
-                    }
-                }
-            });
 
             mIBdelete.setOnClickListener(new View.OnClickListener() {
                 @Override
