@@ -1,6 +1,5 @@
 package edu.upc.damo.llistapp.Adapters;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.upc.damo.llistapp.Entitats.Assignatura;
+import edu.upc.damo.llistapp.Objectes.Assignatura;
 import edu.upc.damo.llistapp.R;
 
 public class AdapterAssignatures extends RecyclerView.Adapter<

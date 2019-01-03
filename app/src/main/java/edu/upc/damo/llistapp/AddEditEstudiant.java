@@ -3,7 +3,6 @@ package edu.upc.damo.llistapp;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,6 +10,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,18 +28,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import edu.upc.damo.llistapp.Entitats.Estudiant;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class AddEditEstudiant extends AppCompatActivity {
+public class AddEditEstudiant extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     private final int FOTO_CAMERA = 1, FOTO_GALERIA = 2;
     private boolean editActivity = false;
-    private String CAMERA_PERMISION = Manifest.permission.CAMERA;
 
-    private ImageButton buto_camara;
     private EditText nom, cognoms, dni, correu;
     private CircleImageView fotoEstudiant;
 
@@ -91,7 +92,7 @@ public class AddEditEstudiant extends AppCompatActivity {
     }
 
     private void inicialitza(){
-        buto_camara = (ImageButton) findViewById(R.id.ib_camara);
+        ImageButton buto_camara = (ImageButton) findViewById(R.id.ib_camara);
         nom = (EditText) findViewById(R.id.et_nom);
         cognoms = (EditText) findViewById(R.id.et_cognoms);
         dni = (EditText) findViewById(R.id.et_dni);
@@ -99,10 +100,10 @@ public class AddEditEstudiant extends AppCompatActivity {
         fotoEstudiant = (CircleImageView) findViewById(R.id.ci_avatar);
 
         Intent intent = getIntent();
-        /* Si el intent te un extra d'un objecte de tipus estudiant, vol dir que l'activity
-        sera d'edicio d'un estudiant ja creat. Capturem els seus atributs i els mostrem en
-        els seus camps EditText corresponents. Si no te cap extr voldrar dir que l'activity
-        sera de creacio d'un nou estudiant,*/
+        /* Si el intent te un extra d'un objecte de tipus estudiant, l'activity
+        serà d'edició d'un estudiant ja creat. En aquest cas, capturem els seus atributs i els mostrem en
+        els seus camps EditText corresponents. Si no te cap extra vol dir que l'activity
+        sera de creació d'un nou estudiant.*/
         if(intent.hasExtra(GestioEstudiants.EXTRA_NOM)){
             setTitle("Edit Estudiant");
             editActivity = true;
@@ -125,73 +126,113 @@ public class AddEditEstudiant extends AppCompatActivity {
 
     }
 
-    //Funcions gestio imatge del Estudiant
+    //Metodes que gestionen la imatge de perfil del Estudiant
 
-    /*Aquesta funcio mostra un dialeg d'opcions per escollir la imatge de la galeria
-    o de la camara */
+    /*Mètode que mostra un dialeg d'opcions per carregar la imatge de perfil de l'alumne. */
     private void mostraDialegFoto(){
-        try {
-            PackageManager pm = getPackageManager();
-            int permis = pm.checkPermission(Manifest.permission.CAMERA, getPackageName());
-            if (permis != PackageManager.PERMISSION_GRANTED){
-                final CharSequence[] opcionsDialeg = {"Fer una foto","Escull foto","Cancel·la"};
-                final AlertDialog.Builder dialegFoto = new AlertDialog.Builder(this);
-                dialegFoto.setTitle("Escull opció");
-                dialegFoto.setItems(opcionsDialeg, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (opcionsDialeg[which].equals("Fer una foto")){
-                            dialog.dismiss();
-                            fotoCamera();
-                        }
-                        else if (opcionsDialeg[which].equals("Escull foto")){
-                            dialog.dismiss();
-                            fotoGaleria();
-                        }
-                        else if (opcionsDialeg[which].equals("Cancel·la")){
-                            dialog.dismiss();
-                        }
-                    }
-                });
-                dialegFoto.show();
+        final CharSequence[] opcionsDialeg = {"Fer una foto","Escull foto","Cancel·la"};
+        final AlertDialog.Builder dialegFoto = new AlertDialog.Builder(this);
+        dialegFoto.setTitle("Escull opció");
+        dialegFoto.setItems(opcionsDialeg, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: //Fer una foto
+                        dialog.dismiss();
+                        fotoCamera();
+                        break;
+                    case 1: //Escull foto de galeria
+                        dialog.dismiss();
+                        fotoGaleria();
+                        break;
+                    case 2: //Cancel·la
+                        dialog.dismiss();
+                        break;
+                }
             }
-            else toastMessage("Sense permisos de camera");
+        });
+        dialegFoto.show();
+    }
+
+    /* Metode que crea un nou intent que obre la galeria d'imatges del dispositiu */
+    private void fotoGaleria(){
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, FOTO_GALERIA);
+    }
+
+    /* Metode que crea un nou intent que obre la camera del dispositiu */
+    @AfterPermissionGranted(FOTO_CAMERA)
+    private void fotoCamera(){
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(EasyPermissions.hasPermissions(this, perms)){
+            // Es tenen tots els permisos, nou intent per obrir la camara.
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, FOTO_CAMERA);
         }
-        catch (Exception e){
-            toastMessage("Error de permisos");
-            e.printStackTrace();
+        // No es tenen permisos, s'envia una nova sol·licitud.
+        else EasyPermissions.requestPermissions(this,
+                    "Es requereixen permisos per accedir a la càmera", FOTO_CAMERA, perms);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) { }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        /*Comprovem si el usuari ha denegat els permisos i si ha marcat l'opció de no preguntar més.
+        En aquest cas, es mostra un diàleg i redirigeix l'usuari a 'app settings' per activar-los. */
+        if(EasyPermissions.somePermissionPermanentlyDenied(this,perms)) {
+            new AppSettingsDialog.Builder(this).build().show();
         }
     }
 
-    /* Capturem i gestionem la resposta del intent (startActivityForResult) */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+    /* Recuperem la foto que ens retornen els diferents intents (Camara o galeria) i la guardem.*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == FOTO_GALERIA){
-                if (data != null){
-                    Uri dataUri = data.getData();
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dataUri);
-                        String path = saveImage(bitmap);
-                        fotoEstudiant.setImageBitmap(bitmap);
-                        //estudiant.setFoto();
-                    }
-                    catch (IOException e){
-                        e.printStackTrace();
-                        toastMessage("Error!");
-                    }
+        if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
+            //Obrim la camara un cop l'usuari hagi modificat els permisos desde 'app settings'
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, FOTO_CAMERA);
+        }
+        else if(requestCode == FOTO_GALERIA){
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    String path = saveImage(bitmap);
+                    fotoEstudiant.setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    toastMessage("Error");
                 }
             }
-            else if (requestCode == FOTO_CAMERA){
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                fotoEstudiant.setImageBitmap(thumbnail);
-                saveImage(thumbnail);
-                toastMessage("Imatge Guardada!");
-            }
+        }
+        else if(requestCode == FOTO_CAMERA){
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            fotoEstudiant.setImageBitmap(thumbnail);
+            saveImage(thumbnail);
+            toastMessage("Imatge Guardada");
         }
     }
 
+    // Metodes auxiliars
+    private void toastMessage(String missatge){
+        Toast.makeText(this,missatge,Toast.LENGTH_SHORT).show();
+    }
+    private boolean checkEmptyFields(){
+        return nom.getText().length() == 0 || cognoms.getText().length() == 0
+                || dni.getText().length() == 0 || correu.getText().length() == 0;
+    }
     private String saveImage(Bitmap bitmap){
         String absPath = "";
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -219,27 +260,4 @@ public class AddEditEstudiant extends AppCompatActivity {
         return absPath;
     }
 
-    /* Metode que crea un nou intent que obre la galeria d'imatges del dispositiu */
-    private void fotoGaleria(){
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, FOTO_GALERIA);
-    }
-
-    /* Metode que crea un nou intent que obre la camera del dispositiu */
-    private void fotoCamera(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, FOTO_CAMERA);
-    }
-
-
-    // Funcions auxiliars
-
-    private void toastMessage(String missatge){
-        Toast.makeText(this,missatge,Toast.LENGTH_SHORT).show();
-    }
-    private boolean checkEmptyFields(){
-        return nom.getText().length() == 0 || cognoms.getText().length() == 0
-                || dni.getText().length() == 0 || correu.getText().length() == 0;
-    }
 }

@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Llistapp</string>
     <string name="tv_presentacio">Menú Principal</string>
-    <string name="BotoGestioAlum">Gestiona Estudiants</string>
-    <string name="BotoGestioAssig">Gestiona Assignatures</string>
-    <string name="BotoGestioAssist">Gestiona Assistencia</string>
+    <string name="BotoGestioAlum">Estudiants</string>
+    <string name="BotoGestioAssig">Assignatures</string>
+    <string name="BotoGestioAssist">Assistències</string>
+    <string name="BotoEines">Eines</string>
     <string name="title_activity_gestiona_alumnes">Gestiona Alumnes</string>
     <string name="title_activity_validacio_assistencia">ValidacioAssistencia</string>
     <string name="title_activity_gestio_assignatures">GestioAssignatures</string>
@@ -30,4 +31,5 @@
     <string name="tv_DataAssist">Dim 26 Des 2018 14:30:00</string>
     <string name="tv_seleccionaAssig">Selecciona Assignatura:</string>
     <string name="tv_info_assistents">Presents %1$d · Absents %2$d</string>
+    <string name="iconitem">IconItem</string>
 </resources>

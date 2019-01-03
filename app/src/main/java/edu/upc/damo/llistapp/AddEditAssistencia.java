@@ -19,7 +19,7 @@ import java.util.Set;
 
 import edu.upc.damo.llistapp.Adapters.AdapterEstudiantsAssistencia;
 import edu.upc.damo.llistapp.DB.DBManager;
-import edu.upc.damo.llistapp.Entitats.Estudiant;
+import edu.upc.damo.llistapp.Objectes.Estudiant;
 
 public class AddEditAssistencia extends AppCompatActivity {
 

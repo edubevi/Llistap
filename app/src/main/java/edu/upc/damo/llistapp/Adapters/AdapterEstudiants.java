@@ -1,9 +1,7 @@
 package edu.upc.damo.llistapp.Adapters;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import edu.upc.damo.llistapp.Entitats.Estudiant;
+import edu.upc.damo.llistapp.Objectes.Estudiant;
 import edu.upc.damo.llistapp.R;
 
-public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.ViewHolderEstudiants> implements Filterable {
+public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.ViewHolderEstudiants>
+        implements Filterable {
 
     private static final String TAG = "AdapterEstudiants";
     private List<Estudiant> mListEstudiants;

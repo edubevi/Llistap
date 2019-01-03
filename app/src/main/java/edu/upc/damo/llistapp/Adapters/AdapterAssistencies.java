@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import edu.upc.damo.llistapp.Entitats.Assistencia;
+import edu.upc.damo.llistapp.Objectes.Assistencia;
 import edu.upc.damo.llistapp.R;
 
 public class AdapterAssistencies extends RecyclerView.Adapter<

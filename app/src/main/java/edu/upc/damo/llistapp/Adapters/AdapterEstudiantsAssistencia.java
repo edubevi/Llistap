@@ -14,7 +14,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.upc.damo.llistapp.DB.DBManager;
-import edu.upc.damo.llistapp.Entitats.Estudiant;
+import edu.upc.damo.llistapp.Objectes.Estudiant;
 import edu.upc.damo.llistapp.R;
 
 public class AdapterEstudiantsAssistencia extends RecyclerView.Adapter<

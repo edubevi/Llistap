@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerViewAccessibilityDelegate;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +21,8 @@ import java.util.List;
 
 import edu.upc.damo.llistapp.Adapters.AdapterAssistencies;
 import edu.upc.damo.llistapp.DB.DBManager;
-import edu.upc.damo.llistapp.Entitats.Assignatura;
-import edu.upc.damo.llistapp.Entitats.Assistencia;
+import edu.upc.damo.llistapp.Objectes.Assignatura;
+import edu.upc.damo.llistapp.Objectes.Assistencia;
 
 public class GestioAssistencies extends AppCompatActivity {
 

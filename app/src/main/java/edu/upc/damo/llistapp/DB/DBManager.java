@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -13,9 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.upc.damo.llistapp.Entitats.Assignatura;
-import edu.upc.damo.llistapp.Entitats.Assistencia;
-import edu.upc.damo.llistapp.Entitats.Estudiant;
+import edu.upc.damo.llistapp.Objectes.Assignatura;
+import edu.upc.damo.llistapp.Objectes.Assistencia;
+import edu.upc.damo.llistapp.Objectes.Estudiant;
 
 public class DBManager {
 
@@ -198,6 +197,12 @@ public class DBManager {
     }
 
     // Deletes
+    public void deleteTable(String table){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String dropQuery = "DELETE FROM " + table;
+        db.execSQL(dropQuery);
+        db.close();
+    }
 
     public void deleteEstudiant(String dniEstudiant){
         SQLiteDatabase db = dbHelper.getWritableDatabase();

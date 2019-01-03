@@ -17,7 +17,7 @@ import java.util.Set;
 
 import edu.upc.damo.llistapp.Adapters.AdapterEstudiantsAssignatura;
 import edu.upc.damo.llistapp.DB.DBManager;
-import edu.upc.damo.llistapp.Entitats.Estudiant;
+import edu.upc.damo.llistapp.Objectes.Estudiant;
 
 public class AddEditAssignatura extends AppCompatActivity {
 

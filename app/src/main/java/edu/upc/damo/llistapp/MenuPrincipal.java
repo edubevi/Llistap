@@ -3,12 +3,19 @@ package edu.upc.damo.llistapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
+import edu.upc.damo.llistapp.Adapters.AdapterMenuItems;
+
 public class MenuPrincipal extends AppCompatActivity {
 
-    private static final int ACT_ESTUDIANTS = 1, ACT_ASSIGNATURES = 2, ACT_ASSISTENCIES = 3;
+    private static final int ACT_ESTUDIANTS = 0, ACT_ASSIGNATURES = 1, ACT_ASSISTENCIES = 2,
+    ACT_EINES = 3;
+    private AdapterMenuItems mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,27 +25,24 @@ public class MenuPrincipal extends AppCompatActivity {
     }
 
     private void init(){
-        Button btn_Alumnes = findViewById(R.id.btn_estudiants);
-        btn_Alumnes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initNewActivity(ACT_ESTUDIANTS);
-            }
-        });
+        initRecycleView();
+    }
 
-        Button btn_Assignatures = findViewById(R.id.btn_assign);
-        btn_Assignatures.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initNewActivity(ACT_ASSIGNATURES);
-            }
-        });
+    private void initRecycleView() {
+        RecyclerView RVmenuItems = findViewById(R.id.rv_llistaMenuItems);
+        RVmenuItems.setHasFixedSize(true);
+        RVmenuItems.setLayoutManager(new GridLayoutManager(this, 2));
 
-        Button btn_Assistencies = findViewById(R.id.btn_assist);
-        btn_Assistencies.setOnClickListener(new View.OnClickListener() {
+        String[] itemsName = new String[] {"Estudiants","Assignatures","Assistencies","Eines"};
+        int[] itemsImage = new int[] {R.drawable.ic_estudiant, R.drawable.ic_assignatura,
+                R.drawable.ic_assistencia, R.drawable.ic_eines};
+
+        mAdapter = new AdapterMenuItems(itemsName, itemsImage);
+        RVmenuItems.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new AdapterMenuItems.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                initNewActivity(ACT_ASSISTENCIES);
+            public void onItemClick(int position) {
+                initNewActivity(position);
             }
         });
     }
@@ -54,6 +58,9 @@ public class MenuPrincipal extends AppCompatActivity {
                 break;
             case ACT_ASSISTENCIES:
                 i.setClass(MenuPrincipal.this, GestioAssistencies.class);
+                break;
+            case ACT_EINES:
+                i.setClass(MenuPrincipal.this,GestioEines.class);
         }
         startActivity(i);
     }
