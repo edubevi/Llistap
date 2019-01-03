@@ -23,6 +23,7 @@ import java.util.List;
 import edu.upc.damo.llistapp.Adapters.AdapterEstudiants;
 import edu.upc.damo.llistapp.DB.DBManager;
 import edu.upc.damo.llistapp.Objectes.Estudiant;
+import edu.upc.damo.llistapp.Utils.Utils;
 
 public class GestioEstudiants extends AppCompatActivity {
 
@@ -69,7 +70,6 @@ public class GestioEstudiants extends AppCompatActivity {
                 startActivityForResult(nouEstudiant, ADD_ESTUDIANT_REQUEST);
             }
         });
-
         inicialitzaRecycleView();
     }
 
@@ -163,15 +163,17 @@ public class GestioEstudiants extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                     mAdapter.updateFullList();
                     boolean inserData = mConn.insereixEstudiant(nouEstudiant);
-                    if (!inserData) toastMessage("ERROR al afegir Estudiant a la Base de Dades");
-                    else toastMessage("Estudiant afegit");
+                    if (!inserData) Utils.toastMessage(
+                            "ERROR al afegir Estudiant a la Base de Dades", this);
+                    else Utils.toastMessage("Estudiant afegit",this);
                     break;
 
                 case EDIT_ESTUDIANT_REQUEST:
                     int index = data.getIntExtra(EXTRA_POS,0);
                     boolean upd = mConn.updateEstudiant(mLlistaEstudiants.get(index),nouEstudiant);
-                    if(!upd) toastMessage("ERROR al actualitzar Estudiant a la Base de Dades");
-                    else toastMessage("Estudiant modificat");
+                    if(!upd) Utils.toastMessage(
+                            "ERROR al actualitzar Estudiant a la Base de Dades", this);
+                    else Utils.toastMessage("Estudiant modificat", this);
                     mLlistaEstudiants.get(index).setNom(nouEstudiant.getNom());
                     mLlistaEstudiants.get(index).setCognoms(nouEstudiant.getCognoms());
                     mLlistaEstudiants.get(index).setDni(nouEstudiant.getDni());
@@ -181,16 +183,11 @@ public class GestioEstudiants extends AppCompatActivity {
                     break;
             }
         }
-        else toastMessage("Estudiant no guardat");
+        else Utils.toastMessage("Estudiant no guardat", this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
-    }
-
-    //Metodes auxiliars
-    private void toastMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }

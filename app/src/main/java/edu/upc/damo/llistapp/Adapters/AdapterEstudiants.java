@@ -1,7 +1,5 @@
 package edu.upc.damo.llistapp.Adapters;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +16,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.upc.damo.llistapp.Objectes.Estudiant;
 import edu.upc.damo.llistapp.R;
+import edu.upc.damo.llistapp.Utils.Utils;
 
 public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.ViewHolderEstudiants>
         implements Filterable {
@@ -51,7 +50,6 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
             mCVavatar = itemView.findViewById(R.id.imatge_estudiant);
             mTVnom = itemView.findViewById(R.id.tv_nomEstudiant);
             mTVdni = itemView.findViewById(R.id.tv_dniEstudiant);
-            //mCardLayout = itemView.findViewById(R.id.cardLayout);
             mIBdelete = itemView.findViewById(R.id.ib_delete);
             mIBedit = itemView.findViewById(R.id.ib_edit);
 
@@ -102,7 +100,7 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
         String nomComplet = est.getNom() + " " + est.getCognoms();
         holder.mTVnom.setText(nomComplet);
         holder.mTVdni.setText(est.getDni());
-        holder.mCVavatar.setImageBitmap(byteArraytoBitmap(est.getFoto()));
+        holder.mCVavatar.setImageBitmap(Utils.byteArraytoBitmap(est.getFoto()));
     }
 
    /* public void updateLlistaPlena() {
@@ -145,9 +143,4 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
             notifyDataSetChanged();
         }
     };
-
-    //Funcions Auxiliars
-    private Bitmap byteArraytoBitmap(byte[] byteArray){
-        return BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-    }
 }

@@ -62,6 +62,4 @@ public class AdapterEines extends RecyclerView.Adapter<AdapterEines.ViewHolderEi
 
     @Override
     public int getItemCount() { return mItemsName.length; }
-
-
 }

@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -32,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import edu.upc.damo.llistapp.Utils.Utils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -62,7 +62,7 @@ public class AddEditEstudiant extends AppCompatActivity implements EasyPermissio
         switch (item.getItemId()) {
             case R.id.action_add:
                 boolean emptyFields = checkEmptyFields();
-                if(emptyFields) toastMessage("Cal omplir tots els camps");
+                if(emptyFields) Utils.toastMessage("Cal omplir tots els camps",this);
                 else {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     Bitmap fotoBmp = ((BitmapDrawable) fotoEstudiant.getDrawable()).getBitmap();
@@ -92,12 +92,12 @@ public class AddEditEstudiant extends AppCompatActivity implements EasyPermissio
     }
 
     private void inicialitza(){
-        ImageButton buto_camara = (ImageButton) findViewById(R.id.ib_camara);
-        nom = (EditText) findViewById(R.id.et_nom);
-        cognoms = (EditText) findViewById(R.id.et_cognoms);
-        dni = (EditText) findViewById(R.id.et_dni);
-        correu = (EditText) findViewById(R.id.et_email);
-        fotoEstudiant = (CircleImageView) findViewById(R.id.ci_avatar);
+        ImageButton buto_camara = findViewById(R.id.ib_camara);
+        nom = findViewById(R.id.et_nom);
+        cognoms = findViewById(R.id.et_cognoms);
+        dni = findViewById(R.id.et_dni);
+        correu = findViewById(R.id.et_email);
+        fotoEstudiant = findViewById(R.id.ci_avatar);
 
         Intent intent = getIntent();
         /* Si el intent te un extra d'un objecte de tipus estudiant, l'activity
@@ -208,12 +208,11 @@ public class AddEditEstudiant extends AppCompatActivity implements EasyPermissio
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
                     fotoEstudiant.setImageBitmap(bitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    toastMessage("Error");
+                    Utils.toastMessage("Error",this);
                 }
             }
         }
@@ -221,14 +220,11 @@ public class AddEditEstudiant extends AppCompatActivity implements EasyPermissio
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             fotoEstudiant.setImageBitmap(thumbnail);
             saveImage(thumbnail);
-            toastMessage("Imatge Guardada");
+            Utils.toastMessage("Imatge Guardada",this);
         }
     }
 
     // Metodes auxiliars
-    private void toastMessage(String missatge){
-        Toast.makeText(this,missatge,Toast.LENGTH_SHORT).show();
-    }
     private boolean checkEmptyFields(){
         return nom.getText().length() == 0 || cognoms.getText().length() == 0
                 || dni.getText().length() == 0 || correu.getText().length() == 0;

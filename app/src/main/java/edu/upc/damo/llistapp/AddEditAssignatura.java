@@ -18,6 +18,7 @@ import java.util.Set;
 import edu.upc.damo.llistapp.Adapters.AdapterEstudiantsAssignatura;
 import edu.upc.damo.llistapp.DB.DBManager;
 import edu.upc.damo.llistapp.Objectes.Estudiant;
+import edu.upc.damo.llistapp.Utils.Utils;
 
 public class AddEditAssignatura extends AppCompatActivity {
 
@@ -46,7 +47,7 @@ public class AddEditAssignatura extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_add:
                 boolean emptyFields = checkEmptyFields();
-                if(emptyFields) toastMessage("Cal omplir tots el camps i seleccionar almenys un matriculat");
+                if(emptyFields) Utils.toastMessage("Cal omplir tots el camps i seleccionar almenys un matriculat", this);
                 else {
                     Intent resultat = new Intent();
                     resultat.putExtra(GestioAssignatures.EXTRA_NOM_ASSIG, mNomAssig.getText().toString());
@@ -109,9 +110,6 @@ public class AddEditAssignatura extends AppCompatActivity {
     }
 
     //Metodes auxiliars
-    private void toastMessage(String missatge){
-        Toast.makeText(this,missatge,Toast.LENGTH_SHORT).show();
-    }
     private boolean checkEmptyFields(){
         return mNomAssig.getText().length() == 0 || mAliasAssig.getText().length() == 0 ||
                 mMatriculats.size() == 0;

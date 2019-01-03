@@ -23,6 +23,7 @@ import edu.upc.damo.llistapp.Adapters.AdapterAssistencies;
 import edu.upc.damo.llistapp.DB.DBManager;
 import edu.upc.damo.llistapp.Objectes.Assignatura;
 import edu.upc.damo.llistapp.Objectes.Assistencia;
+import edu.upc.damo.llistapp.Utils.Utils;
 
 public class GestioAssistencies extends AppCompatActivity {
 
@@ -69,9 +70,10 @@ public class GestioAssistencies extends AppCompatActivity {
                     long inserData = mConn.insereixAssistencia(newAssistencia,mNomAssignatura,
                             dniPresents, dniAbsents);
                     mAdapter.notifyDataSetChanged();
-                    if(inserData == -1) toastMessage("ERROR al afegir Assistencia a la Base de Dades");
+                    if(inserData == -1) Utils.toastMessage(
+                            "ERROR al afegir Assistencia a la Base de Dades",this);
                     else {
-                        toastMessage("Assistencia afegida");
+                        Utils.toastMessage("Assistencia afegida",this);
                         newAssistencia.setId((int)inserData);
                         mAdapter.insertAssistenciaToList(newAssistencia);
                         mAdapter.notifyDataSetChanged();
@@ -86,24 +88,28 @@ public class GestioAssistencies extends AppCompatActivity {
                     for(String dni : dniPresents){
                         upd = mConn.updateEstudiantAssistencia(dni, a.getId(),true);
                         if(!upd) {
-                            toastMessage("ERROR al actualitzar EstudiantAssistencia a la Base de Dades");
+                            Utils.toastMessage(
+                                    "ERROR al actualitzar EstudiantAssistencia a la Base de Dades",
+                                    this);
                             break;
                         }
                     }
                     for(String dni : dniAbsents){
                         upd = mConn.updateEstudiantAssistencia(dni, a.getId(),false);
                         if(!upd) {
-                            toastMessage("ERROR al actualitzar EstudiantAssistencia a la Base de Dades");
+                            Utils.toastMessage(
+                                    "ERROR al actualitzar EstudiantAssistencia a la Base de Dades",
+                                    this);
                             break;
                         }
                     }
-                    if(upd) toastMessage("Assistencia modificada");
+                    if(upd) Utils.toastMessage("Assistencia modificada",this);
                     mAdapter.notifyItemChanged(index);
                     break;
             }
 
         }
-        else toastMessage("Assignatura no guardada");
+        else Utils.toastMessage("Assignatura no guardada",this);
     }
 
     // Init methods
@@ -116,7 +122,8 @@ public class GestioAssistencies extends AppCompatActivity {
         mFABAssistencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mNomAssignatura.isEmpty()) toastMessage("Cal seleccionar una assignatura.");
+                if(mNomAssignatura.isEmpty())  Utils.toastMessage(
+                        "Cal selecciona una assignatura", getApplicationContext());
                 else {
                     Long date = System.currentTimeMillis();
                     Intent addAssistencia = new Intent(
@@ -133,7 +140,7 @@ public class GestioAssistencies extends AppCompatActivity {
     private void initSpinner() {
         Spinner mSpinner = findViewById(R.id.spn_assist);
         List<Assignatura> assignaturaList = mConn.getAssignaturesList();
-        ArrayAdapter<Assignatura> adapter = new ArrayAdapter<Assignatura>(this,
+        ArrayAdapter<Assignatura> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, assignaturaList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
@@ -154,7 +161,7 @@ public class GestioAssistencies extends AppCompatActivity {
     }
 
     private void initRecycleView() {
-        RecyclerView RVassistencies = (RecyclerView) findViewById(R.id.rv_llistaAssistencies);
+        RecyclerView RVassistencies = findViewById(R.id.rv_llistaAssistencies);
         RVassistencies.setHasFixedSize(true);
         RVassistencies.setLayoutManager(new LinearLayoutManager(this));
 
@@ -180,15 +187,14 @@ public class GestioAssistencies extends AppCompatActivity {
             @Override
             public void onDeleteClick(final int position) {
                 final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(GestioAssistencies.this);
-                final int pos = position;
                 deleteDialog.setTitle("Listapp");
                 deleteDialog.setMessage("Vols eleiminar l'assistència? ");
                 deleteDialog.setPositiveButton("ELIMINA", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mConn.deleteAssistencia(mAdapter.getAssistenciaFromList(pos).getId());
-                        mAdapter.notifyItemRemoved(pos);
-                        mAdapter.deleteAssistenciaFromList(pos);
+                        mConn.deleteAssistencia(mAdapter.getAssistenciaFromList(position).getId());
+                        mAdapter.notifyItemRemoved(position);
+                        mAdapter.deleteAssistenciaFromList(position);
                         dialog.dismiss();
                     }
                 });
@@ -206,10 +212,5 @@ public class GestioAssistencies extends AppCompatActivity {
     private void updateRecycleView(String nomAssignatura) {
         mAdapter.setmListAssistencies(mConn.getAssistenciesAssignaturaList(nomAssignatura));
         mAdapter.notifyDataSetChanged();
-    }
-
-    //Auxiliar methods
-    private void toastMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }

@@ -15,12 +15,15 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.upc.damo.llistapp.Adapters.AdapterAssignatures;
 import edu.upc.damo.llistapp.DB.DBManager;
 import edu.upc.damo.llistapp.Objectes.Assignatura;
+import edu.upc.damo.llistapp.Utils.Utils;
 
 public class GestioAssignatures extends AppCompatActivity {
 
@@ -73,15 +76,17 @@ public class GestioAssignatures extends AppCompatActivity {
                     mListAssignatures.add(newAssignatura);
                     mAdapter.notifyDataSetChanged();
                     mAdapter.updateFullList();
-                    if(!inserData) toastMessage("ERROR al afegir Assignatura a la Base de Dades");
-                    else toastMessage("Assignatura afegida");
+                    if(!inserData) Utils.toastMessage(
+                            "ERROR al afegir Assignatura a la base de dades",this);
+                    else Utils.toastMessage("Assignatura afegida",this);
                     break;
 
                 case EDIT_ASSIGNATURA_REQUEST:
                     int index = data.getIntExtra(EXTRA_POS,0);
                     boolean upd = mConn.updateAssignatura(mListAssignatures.get(index), newAssignatura);
-                    if(!upd) toastMessage("ERROR al actualitzar Assignatura a la Base de Dades");
-                    else toastMessage("Assignatura modificada");
+                    if(!upd) Utils.toastMessage(
+                            "ERROR al actualitzar Assignatura a la Base de Dades",this);
+                    else Utils.toastMessage("Assignatura modificada",this);
                     mListAssignatures.get(index).setNom(newAssignatura.getNom());
                     mListAssignatures.get(index).setAlias(newAssignatura.getAlias());
                     mListAssignatures.get(index).setMatriculats(newAssignatura.getMatriculats());
@@ -89,13 +94,13 @@ public class GestioAssignatures extends AppCompatActivity {
                     break;
             }
         }
-        else toastMessage("Assignatura no guardada");
+        else Utils.toastMessage("Assignatura no guardada",this);
     }
 
     //Init methods
     private void init() {
         mConn = new DBManager(getApplicationContext());
-        FloatingActionButton mFABaddAssignautra = (FloatingActionButton) findViewById(R.id.fab_addAssignatura);
+        FloatingActionButton mFABaddAssignautra = findViewById(R.id.fab_addAssignatura);
         mFABaddAssignautra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +113,7 @@ public class GestioAssignatures extends AppCompatActivity {
     }
 
     private void initRecycleView() {
-        RecyclerView RVassignatures = (RecyclerView) findViewById(R.id.rv_llistaAssignatures);
+        RecyclerView RVassignatures = findViewById(R.id.rv_llistaAssignatures);
         RVassignatures.setHasFixedSize(true);
         RVassignatures.setLayoutManager(new LinearLayoutManager(this));
 
@@ -175,10 +180,4 @@ public class GestioAssignatures extends AppCompatActivity {
             }
         });
     }
-
-    //Auxiliar methods
-    private void toastMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-
 }
