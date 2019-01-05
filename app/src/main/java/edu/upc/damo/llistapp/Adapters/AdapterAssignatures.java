@@ -12,26 +12,27 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.upc.damo.llistapp.Models.ModelAssignatura;
 import edu.upc.damo.llistapp.Objectes.Assignatura;
 import edu.upc.damo.llistapp.R;
 
 public class AdapterAssignatures extends RecyclerView.Adapter<
         AdapterAssignatures.ViewHolderAssignatures> implements Filterable {
 
-    private List<Assignatura> mListAssignatures;
-    private List<Assignatura> mListAssignaturesFull;
-    private OnItemClickListener mListener;
+    private List<Assignatura> assignaturas;
+    private List<Assignatura> assignaturesCopy;
+    private OnItemClickListener listener;
     private Filter mFilterList = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Assignatura> filteredList = new ArrayList<>();
             if(constraint == null || constraint.length() == 0) {
                 //Si no s'escriu cap patro de filtre en el quadre de cerca, retornem totes les assignatures
-                filteredList.addAll(mListAssignaturesFull);
+                filteredList.addAll(assignaturesCopy);
             }
             else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for(Assignatura item: mListAssignaturesFull){
+                for(Assignatura item: assignaturesCopy){
                     if(item.getAlias().toLowerCase().contains(filterPattern) ||
                             item.getNom().toLowerCase().contains(filterPattern)){
                         filteredList.add(item);
@@ -45,8 +46,8 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            mListAssignatures.clear();
-            mListAssignatures.addAll((List) results.values);
+            assignaturas.clear();
+            assignaturas.addAll((List) results.values);
             notifyDataSetChanged();
         }
     };
@@ -56,18 +57,18 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
         void onDeleteClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) { this.mListener = listener; }
+    public void setOnItemClickListener(OnItemClickListener listener) { this.listener = listener; }
 
-    public static class ViewHolderAssignatures extends RecyclerView.ViewHolder {
+    static class ViewHolderAssignatures extends RecyclerView.ViewHolder {
 
-        private TextView mTValias, mTVnom;
-        private ImageButton mIBdelete;
+        private TextView tv_alias, tv_nom;
+        private ImageButton ib_delete;
 
-        public ViewHolderAssignatures(View itemView, final OnItemClickListener listener) {
+        ViewHolderAssignatures(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mTValias = itemView.findViewById(R.id.tv_alias);
-            mTVnom = itemView.findViewById(R.id.tv_nomAssignatura);
-            mIBdelete = itemView.findViewById(R.id.ib_deleteAssignatura);
+            tv_alias = itemView.findViewById(R.id.tv_alias);
+            tv_nom = itemView.findViewById(R.id.tv_nomAssignatura);
+            ib_delete = itemView.findViewById(R.id.ib_deleteAssignatura);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +80,7 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
                 }
             });
 
-            mIBdelete.setOnClickListener(new View.OnClickListener() {
+            ib_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener != null){
@@ -91,32 +92,29 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
         }
     }
 
-    public AdapterAssignatures(List<Assignatura> list) {
-        this.mListAssignatures = list; //Referencia a la llista de GestioAssignatures
-        this.mListAssignaturesFull = new ArrayList<>(mListAssignatures);
+    public AdapterAssignatures(ModelAssignatura model) {
+        assignaturas = model.getListAssignatures();
+        assignaturesCopy = new ArrayList<>(model.getListAssignatures());
     }
 
-    public void updateFullList() {
-        mListAssignaturesFull = new ArrayList<>(mListAssignatures);
-    }
-
+    public void updateFilteredList() { assignaturesCopy = new ArrayList<>(assignaturas); }
 
     @Override
     public ViewHolderAssignatures onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.layout_list_assignatures, parent,false);
-        return new ViewHolderAssignatures(view, mListener);
+        return new ViewHolderAssignatures(view, listener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolderAssignatures holder, int position) {
-        Assignatura assig = mListAssignatures.get(position);
-        holder.mTValias.setText(assig.getAlias());
-        holder.mTVnom.setText(assig.getNom());
+        Assignatura assig = assignaturas.get(position);
+        holder.tv_alias.setText(assig.getAlias());
+        holder.tv_nom.setText(assig.getNom());
     }
 
     @Override
-    public int getItemCount() { return mListAssignatures.size(); }
+    public int getItemCount() { return assignaturas.size(); }
 
     @Override
     public Filter getFilter() { return mFilterList; }

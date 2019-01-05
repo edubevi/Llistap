@@ -7,37 +7,35 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
+import edu.upc.damo.llistapp.Models.ModelAssistencia;
 import edu.upc.damo.llistapp.Objectes.Assistencia;
 import edu.upc.damo.llistapp.R;
+import edu.upc.damo.llistapp.Utils.Utils;
 
 public class AdapterAssistencies extends RecyclerView.Adapter<
         AdapterAssistencies.ViewHolderAssistencies> {
 
-    private List<Assistencia> mListAssistencies = new ArrayList<>();
-    private OnItemClickListener mListener;
+    private List<Assistencia> assistencies;
+    private OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
         void onDeleteClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) { this.mListener = listener; }
+    public void setOnItemClickListener(OnItemClickListener listener) { this.listener = listener; }
 
-    public static class ViewHolderAssistencies extends RecyclerView.ViewHolder {
+    static class ViewHolderAssistencies extends RecyclerView.ViewHolder {
 
-        private ImageButton mIBdelete;
-        private TextView mTVdate;
+        private ImageButton ib_delete;
+        private TextView tv_date;
 
-        public ViewHolderAssistencies(View itemView, final OnItemClickListener listener) {
+        ViewHolderAssistencies(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mIBdelete = itemView.findViewById(R.id.ib_deleteAssistencia);
-            mTVdate = itemView.findViewById(R.id.tv_dataAssist);
+            ib_delete = itemView.findViewById(R.id.ib_deleteAssistencia);
+            tv_date = itemView.findViewById(R.id.tv_dataAssist);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -49,7 +47,7 @@ public class AdapterAssistencies extends RecyclerView.Adapter<
                 }
             });
 
-            mIBdelete.setOnClickListener(new View.OnClickListener() {
+            ib_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener != null){
@@ -61,41 +59,22 @@ public class AdapterAssistencies extends RecyclerView.Adapter<
         }
     }
 
-    public AdapterAssistencies(List<Assistencia> list) {
-        this.mListAssistencies = list;
-    }
-
-    public void setmListAssistencies(List<Assistencia> list){
-        this.mListAssistencies = list;
-    }
+    public AdapterAssistencies(ModelAssistencia model) { assistencies = model.getAssistencies(); }
+    public void setAssistencies(List<Assistencia> list) { assistencies = list;}
 
     @Override
     public ViewHolderAssistencies onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.layout_list_assistencies, parent, false);
-        return new ViewHolderAssistencies(view, mListener);
+        return new ViewHolderAssistencies(view, listener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolderAssistencies holder, int position) {
-        Assistencia assist = mListAssistencies.get(position);
-        holder.mTVdate.setText(getFormatDate(assist.getDate()));
+        Assistencia assist = assistencies.get(position);
+        holder.tv_date.setText(Utils.getFormatDate(assist.getDate()));
     }
 
     @Override
-    public int getItemCount() { return mListAssistencies.size(); }
-
-    public Assistencia getAssistenciaFromList(int pos){ return mListAssistencies.get(pos);}
-    public void deleteAssistenciaFromList(int pos) { mListAssistencies.remove(pos); }
-    public void insertAssistenciaToList(Assistencia a) { mListAssistencies.add(a); }
-
-
-    //Auxiliar methods
-    private String getFormatDate(long date){
-
-        SimpleDateFormat sdf = new SimpleDateFormat("EE d-MM-y H:m:s", new Locale("ca","ES"));
-        Date formattedDate = new Date(date);
-        return sdf.format(formattedDate);
-    }
-
+    public int getItemCount() { return assistencies.size(); }
 }

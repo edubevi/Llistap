@@ -11,23 +11,23 @@ import edu.upc.damo.llistapp.R;
 
 public class AdapterMenuItems extends RecyclerView.Adapter<AdapterMenuItems.ViewHolderMenuItems>{
 
-    private OnItemClickListener mListener;
-    private String[] mItems;
-    private int[] mItemsImage;
+    private OnItemClickListener listener;
+    private String[] items;
+    private int[] items_image;
 
 
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){ this.mListener = listener; }
+    public void setOnItemClickListener(OnItemClickListener listener){ this.listener = listener; }
 
-    public static class ViewHolderMenuItems extends RecyclerView.ViewHolder {
+    static class ViewHolderMenuItems extends RecyclerView.ViewHolder {
 
         private ImageView mIVitem;
         private TextView mTVitem;
 
-        public ViewHolderMenuItems(View itemView, final OnItemClickListener listener) {
+        ViewHolderMenuItems(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mIVitem = itemView.findViewById(R.id.iv_menuItem);
             mTVitem = itemView.findViewById(R.id.tv_menuItem);
@@ -45,23 +45,23 @@ public class AdapterMenuItems extends RecyclerView.Adapter<AdapterMenuItems.View
     }
 
     public AdapterMenuItems(String[] items, int[] itemsImage){
-        this.mItems = items;
-        this.mItemsImage = itemsImage;
+        this.items = items;
+        this.items_image = itemsImage;
     }
 
     @Override
     public ViewHolderMenuItems onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.layout_list_menu_item, parent,false);
-        return new ViewHolderMenuItems(view, mListener);
+        return new ViewHolderMenuItems(view, listener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolderMenuItems holder, int position) {
-        holder.mTVitem.setText(mItems[position]);
-        holder.mIVitem.setImageResource(mItemsImage[position]);
+        holder.mTVitem.setText(items[position]);
+        holder.mIVitem.setImageResource(items_image[position]);
     }
 
     @Override
-    public int getItemCount() { return mItems.length; }
+    public int getItemCount() { return items.length; }
 }

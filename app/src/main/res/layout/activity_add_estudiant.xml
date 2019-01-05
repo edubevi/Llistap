@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddEditEstudiant">
+    tools:context=".Activities.AddEditEstudiant">
 
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
@@ -23,7 +23,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/ic_launcher_background" />
+            app:srcCompat="@color/ic_launcher_background"
+            android:contentDescription="@string/desc_backgorund" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ci_avatar"
@@ -49,7 +50,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/ic_camera" />
+            app:srcCompat="@drawable/ic_camera"
+            android:contentDescription="@string/desc_camara" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -72,7 +74,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_name" />
+            app:srcCompat="@drawable/ic_name"
+            android:contentDescription="@string/desc_persona" />
 
         <EditText
             android:id="@+id/et_nom"
@@ -117,7 +120,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_cognoms"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_dni" />
+            app:srcCompat="@drawable/ic_dni"
+            android:contentDescription="@string/desc_dni" />
 
         <EditText
             android:id="@+id/et_dni"
@@ -148,7 +152,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_dni"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/ic_mail" />
+            app:srcCompat="@drawable/ic_mail"
+            android:contentDescription="@string/desc_mail" />
 
         <EditText
             android:id="@+id/et_email"

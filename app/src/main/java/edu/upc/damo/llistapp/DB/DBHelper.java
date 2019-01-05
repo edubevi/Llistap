@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper{
 
-    public static final int DATABASE_VERSION = 1;   //Versió de la DB
-    public static final String DATABASE_NAME = "dblistapp.db";   //Nom de la DB
+    private static final int DATABASE_VERSION = 1;   //Versió de la DB
+    private static final String DATABASE_NAME = "dblistapp.db";   //Nom de la DB
     /**
      * Constructora.
      * @param context: Context de l'aplicació.
      */
-    public DBHelper(Context context) {
+    DBHelper(Context context) {
         /* Cridem a la classe super (SQLiteOpenHelper) passant-li el context, el nom de
         la base de dades i la versió d'aquesta */
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

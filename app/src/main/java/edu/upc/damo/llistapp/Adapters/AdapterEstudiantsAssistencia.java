@@ -1,6 +1,5 @@
 package edu.upc.damo.llistapp.Adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import edu.upc.damo.llistapp.DB.DBManager;
+import edu.upc.damo.llistapp.Models.ModelEstudiantAssistencia;
 import edu.upc.damo.llistapp.Objectes.Estudiant;
 import edu.upc.damo.llistapp.R;
 import edu.upc.damo.llistapp.Utils.Utils;
@@ -19,39 +19,39 @@ import edu.upc.damo.llistapp.Utils.Utils;
 public class AdapterEstudiantsAssistencia extends RecyclerView.Adapter<
         AdapterEstudiantsAssistencia.ViewHolderEstudiantsAssistencia> {
 
-    private List<Estudiant> mListEstudiants;
-    private OnItemClickListener mListener;
-    private int mIdAssistencia;
-    private Context mContext;
+    private List<Estudiant> estudiants;
+    private ArrayList<String> estudiants_presents;
+    private int id_assistencia;
+    private OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onCheckBox(int position, boolean checked);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) { this.mListener = listener; }
+    public void setOnItemClickListener(OnItemClickListener listener) { this.listener = listener; }
 
-    public static class ViewHolderEstudiantsAssistencia extends RecyclerView.ViewHolder {
+    static class ViewHolderEstudiantsAssistencia extends RecyclerView.ViewHolder {
 
-        private CircleImageView mCVavatar;
-        private CheckBox mCheck;
-        private TextView mTVnom, mTVdni;
+        private CircleImageView cv_avatar;
+        private CheckBox check;
+        private TextView tv_nom, tv_dni;
 
-        public ViewHolderEstudiantsAssistencia(View itemView, final OnItemClickListener listener) {
+        ViewHolderEstudiantsAssistencia(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mCVavatar = itemView.findViewById(R.id.ci_listEstCheck);
-            mCheck = itemView.findViewById(R.id.cb_listEstCheck);
-            mTVnom = itemView.findViewById(R.id.tv_nomEstCheck);
-            mTVdni = itemView.findViewById(R.id.tv_dniEstCheck);
+            cv_avatar = itemView.findViewById(R.id.ci_listEstCheck);
+            check = itemView.findViewById(R.id.cb_listEstCheck);
+            tv_nom = itemView.findViewById(R.id.tv_nomEstCheck);
+            tv_dni = itemView.findViewById(R.id.tv_dniEstCheck);
 
-            mCheck.setOnClickListener(new View.OnClickListener() {
+            check.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(listener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
-                            if(mCheck.isChecked()) mCheck.setChecked(true);
-                            else mCheck.setChecked(false);
-                            listener.onCheckBox(position, mCheck.isChecked());
+                            if(check.isChecked()) check.setChecked(true);
+                            else check.setChecked(false);
+                            listener.onCheckBox(position, check.isChecked());
                         }
                     }
                 }
@@ -59,38 +59,35 @@ public class AdapterEstudiantsAssistencia extends RecyclerView.Adapter<
         }
     }
 
-    public AdapterEstudiantsAssistencia(List<Estudiant> list, Context context, int idAssistencia) {
-        this.mListEstudiants = list;
-        this.mContext = context;
-        this.mIdAssistencia = idAssistencia;
+    public AdapterEstudiantsAssistencia(ModelEstudiantAssistencia model) {
+        this.estudiants = model.getEstudiants_assignatura();
+        this.id_assistencia = model.getId_assistencia();
+        this.estudiants_presents = model.getDniPresents();
     }
 
     @Override
     public ViewHolderEstudiantsAssistencia onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.layout_list_estudiants_checkbox, parent, false);
-        return new ViewHolderEstudiantsAssistencia(view, mListener);
+        return new ViewHolderEstudiantsAssistencia(view, listener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolderEstudiantsAssistencia holder, int position) {
-        Estudiant est = mListEstudiants.get(position);
+        Estudiant est = estudiants.get(position);
         String nomComplet = est.getNom() + " " + est.getCognoms();
-        holder.mTVnom.setText(nomComplet);
-        holder.mTVdni.setText(est.getDni());
-        holder.mCVavatar.setImageBitmap(Utils.byteArraytoBitmap(est.getFoto()));
+        holder.tv_nom.setText(nomComplet);
+        holder.tv_dni.setText(est.getDni());
+        holder.cv_avatar.setImageBitmap(Utils.byteArraytoBitmap(est.getFoto()));
         /* Si tenim context vol dir que cridarem al adaptador en una activity en el que editarem.
         Per tant, necessitem recuperar la informació prèvia. */
-        if(mContext != null && mIdAssistencia > 0){
-            DBManager conn = new DBManager(mContext);
+        if(id_assistencia > 0){
             /* Comprovem si el item del recyclerview correspon a un estudiant marcat com a present
             en l'assistència en qüestió. En cas afirmatiu, marquem el seu checkbox. */
-            if(conn.checkPresenciaEstudiant(mIdAssistencia, est.getDni())){
-                holder.mCheck.setChecked(true);
-            }
+            if(estudiants_presents.contains(est.getDni())) holder.check.setChecked(true);
         }
     }
 
     @Override
-    public int getItemCount() { return mListEstudiants.size(); }
+    public int getItemCount() { return estudiants.size(); }
 }

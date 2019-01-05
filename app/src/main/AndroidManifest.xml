@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.upc.damo.llistapp">
 
-    <!--<uses-permission android:name="android.permission.INTERNET" />-->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,33 +20,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MenuPrincipal">
+        <activity android:name=".Activities.MenuPrincipal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".GestioAssignatures"
-            android:parentActivityName=".MenuPrincipal"/>
+            android:name=".Activities.GestioAssignatures"
+            android:parentActivityName=".Activities.MenuPrincipal"/>
         <activity
-            android:name=".GestioAssistencies"
-            android:parentActivityName=".MenuPrincipal"/>
+            android:name=".Activities.GestioAssistencies"
+            android:parentActivityName=".Activities.MenuPrincipal"/>
         <activity
-            android:name=".GestioEstudiants"
-            android:parentActivityName=".MenuPrincipal"/>
+            android:name=".Activities.GestioEstudiants"
+            android:parentActivityName=".Activities.MenuPrincipal"/>
         <activity
-            android:name=".GestioEines"
-            android:parentActivityName=".MenuPrincipal"/>
+            android:name=".Activities.GestioEines"
+            android:parentActivityName=".Activities.MenuPrincipal"/>
         <activity
-            android:name=".AddEditAssignatura"
-            android:parentActivityName=".GestioAssignatures"/>
+            android:name=".Activities.AddEditAssignatura"
+            android:parentActivityName=".Activities.GestioAssignatures"/>
         <activity
-            android:name=".AddEditEstudiant"
-            android:parentActivityName=".GestioEstudiants" />
+            android:name=".Activities.AddEditEstudiant"
+            android:parentActivityName=".Activities.GestioEstudiants" />
         <activity
-            android:name=".AddEditAssistencia"
-            android:parentActivityName=".GestioAssistencies" />
+            android:name=".Activities.AddEditAssistencia"
+            android:parentActivityName=".Activities.GestioAssistencies" />
     </application>
 
 </manifest>

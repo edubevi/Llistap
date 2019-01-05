@@ -8,10 +8,10 @@ import android.provider.BaseColumns;
 public final class DBContract {
 
     // Inicialització de les variables comunes que s'utilitzaran per la creació de les taules
-    public static final String TEXT_TYPE = "TEXT";
-    public static final String INTEGER_TYPE = "INTEGER";
-    public static final String BLOB_TYPE = "BLOB";
-    public static final String COMMA_SEP = ",";
+    static final String TEXT_TYPE = "TEXT";
+    static final String INTEGER_TYPE = "INTEGER";
+    static final String BLOB_TYPE = "BLOB";
+    static final String COMMA_SEP = ",";
 
     //Constructor
     private DBContract(){}
