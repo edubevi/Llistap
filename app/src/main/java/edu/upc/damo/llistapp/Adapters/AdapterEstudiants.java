@@ -155,5 +155,4 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
     public int getCopyListItemIndex(Estudiant e){ return estudiantsCopy.indexOf(e); }
 
     public Estudiant getItem(int index) { return estudiants.get(index); }
-
 }

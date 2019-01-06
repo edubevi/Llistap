@@ -21,7 +21,7 @@
             android:layout_marginBottom="2dp"
             android:layout_marginStart="2dp"
             android:layout_marginTop="2dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/no_user_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/layout_infoEstudiant"
             app:layout_constraintHorizontal_bias="0.5"

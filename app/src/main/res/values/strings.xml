@@ -42,4 +42,7 @@
     <string name="tv_nom_eina">Esborra dades NOM_TAULA</string>
     <string name="tv_desc_eina">Esborra tots els NOM_TAULA de la Base de Dades.</string>
     <string name="desc_edit">icona_editar</string>
+    <string name="tv_empty_est">No hi ha Estudiants per mostrar</string>
+    <string name="tv_empty_assig">No hi ha Assignatures per mostrar</string>
+    <string name="tv_empty_assist">No hi ha Assistències per mostrar</string>
 </resources>

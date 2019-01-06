@@ -3,6 +3,9 @@ package edu.upc.damo.llistapp.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +42,17 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat("EE d-MM-y H:m:s", new Locale("ca","ES"));
         Date formattedDate = new Date(date);
         return sdf.format(formattedDate);
+    }
+
+    public static void setViewsToShow(int listSize, RecyclerView recyclerView, TextView textView){
+        if(listSize == 0){
+            recyclerView.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+        }
+        else {
+            recyclerView.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.GONE);
+        }
     }
 
 }
