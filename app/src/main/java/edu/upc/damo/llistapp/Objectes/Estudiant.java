@@ -67,7 +67,7 @@ public class Estudiant implements Parcelable,Comparable<Estudiant> {
     @Override
     public int compareTo(@NonNull Estudiant o) {
         int nameDiff = this.cognoms.compareToIgnoreCase(o.getCognoms());
-        return nameDiff == 0 ? getDni().compareToIgnoreCase(o.getDni()) : nameDiff;
+        return nameDiff == 0 ? this.dni.compareToIgnoreCase(o.getDni()) : nameDiff;
     }
 
     @Override

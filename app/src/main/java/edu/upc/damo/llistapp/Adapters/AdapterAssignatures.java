@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import edu.upc.damo.llistapp.Models.ModelAssignatura;
@@ -94,10 +95,8 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
 
     public AdapterAssignatures(ModelAssignatura model) {
         assignaturas = model.getListAssignatures();
-        assignaturesCopy = new ArrayList<>(model.getListAssignatures());
+        assignaturesCopy = new ArrayList<>(assignaturas);
     }
-
-    public void updateFilteredList() { assignaturesCopy = new ArrayList<>(assignaturas); }
 
     @Override
     public ViewHolderAssignatures onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -118,5 +117,26 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
 
     @Override
     public Filter getFilter() { return mFilterList; }
+
+    /* Mètodes per gestionar la coherència de la llista d'estudiants del RecyclerView al modificar
+    items amb el searchview. */
+
+    public void deleteCopyListItem(int index) { assignaturesCopy.remove(index); }
+
+    public void editCopyListItem(int index, Assignatura newAssignatura){
+        Assignatura a = assignaturesCopy.get(index);
+        a.setNom(newAssignatura.getNom());
+        a.setAlias(newAssignatura.getAlias());
+        a.setDni_matriculats(newAssignatura.getDni_matriculats());
+    }
+
+    public void addItemOnCopyList(Assignatura novaAssignatura) {
+        assignaturesCopy.add(novaAssignatura);
+        Collections.sort(assignaturesCopy);
+    }
+
+    public int getCopyListItemIndex(Assignatura a) { return assignaturesCopy.indexOf(a); }
+
+    public Assignatura getItem(int index) { return assignaturas.get(index); }
 
 }

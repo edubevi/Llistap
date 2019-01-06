@@ -25,11 +25,21 @@
     <string name="nomEstudiant">Nom Cognom1 Cognom2</string>
     <string name="dniEstudiant">00000000X</string>
     <string name="hintNomAssignatura">Nom de l\'Assignatura</string>
-    <string name="tv_matricualts">Escull alumnes matriculats:</string>
+    <string name="tv_matricualts">Escull alumnes dni_matriculats:</string>
     <string name="hintAliasAssignatura">Alias o nom simplificat</string>
     <string name="imgDesc">delete_item</string>
     <string name="tv_DataAssist">Dim 26 Des 2018 14:30:00</string>
     <string name="tv_seleccionaAssig">Selecciona Assignatura:</string>
     <string name="tv_info_assistents">Presents %1$d · Absents %2$d</string>
     <string name="iconitem">IconItem</string>
+    <string name="desc_foto_birret">birret</string>
+    <string name="desc_backgorund">fons</string>
+    <string name="desc_camara">foto_camara</string>
+    <string name="desc_persona">icona_persona</string>
+    <string name="desc_dni">icona_dni</string>
+    <string name="desc_mail">icona_mail</string>
+    <string name="desc_delete">icona_eliminar</string>
+    <string name="tv_nom_eina">Esborra dades NOM_TAULA</string>
+    <string name="tv_desc_eina">Esborra tots els NOM_TAULA de la Base de Dades.</string>
+    <string name="desc_edit">icona_editar</string>
 </resources>

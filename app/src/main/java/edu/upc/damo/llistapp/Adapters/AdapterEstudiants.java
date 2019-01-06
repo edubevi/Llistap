@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -78,8 +79,6 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
         estudiantsCopy = new ArrayList<>(estudiants);
     }
 
-    public void updateFullList() { estudiantsCopy = new ArrayList<>(estudiants);}
-
     @Override
     public ViewHolderEstudiants onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
@@ -132,4 +131,29 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
             notifyDataSetChanged();
         }
     };
+
+    /* Mètodes per gestionar la coherència de la llista d'estudiants del RecyclerView al modificar
+    items amb el searchview. */
+
+    public void deleteCopyListItem(int index) { estudiantsCopy.remove(index); }
+
+    public void editCopyListItem(int index, Estudiant nouEstudiant) {
+        Estudiant e = estudiantsCopy.get(index);
+        e.setNom(nouEstudiant.getNom());
+        e.setCognoms(nouEstudiant.getCognoms());
+        e.setDni(nouEstudiant.getDni());
+        e.setMail(nouEstudiant.getDni());
+        e.setFoto(nouEstudiant.getFoto());
+        Collections.sort(estudiantsCopy);
+    }
+
+    public void addItemOnCopyList(Estudiant nouEstudiant) {
+        estudiantsCopy.add(nouEstudiant);
+        Collections.sort(estudiantsCopy);
+    }
+
+    public int getCopyListItemIndex(Estudiant e){ return estudiantsCopy.indexOf(e); }
+
+    public Estudiant getItem(int index) { return estudiants.get(index); }
+
 }

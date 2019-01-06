@@ -51,7 +51,7 @@ public class DBManager {
 
         //Assignem Estudiants a la nova assignatura
         if(res != -1) {
-            for (String dni : a.getMatriculats()) {
+            for (String dni : a.getDni_matriculats()) {
                 if(!insereixEstudiantsAssignatura(dni, a.getNom())){
                     res = -1;
                     break;
@@ -166,7 +166,7 @@ public class DBManager {
         on idAssignatura sigui el nom de l'assignatura new_ass.*/
         if (res != -1) {
             boolean succes;
-            for (String dni : new_ass.getMatriculats()) {
+            for (String dni : new_ass.getDni_matriculats()) {
                 succes = insereixEstudiantsAssignatura(dni, new_ass.getNom());
                 if (!succes) {
                     res = -1;

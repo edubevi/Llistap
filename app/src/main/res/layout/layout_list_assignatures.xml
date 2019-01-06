@@ -56,7 +56,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/layout_infoAssignatura"
             app:layout_constraintTop_toTopOf="@+id/layout_infoAssignatura"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            android:contentDescription="@string/desc_delete" />
 
     </android.support.constraint.ConstraintLayout>
 
