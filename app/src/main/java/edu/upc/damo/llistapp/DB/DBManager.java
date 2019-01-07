@@ -72,16 +72,19 @@ public class DBManager {
         int res = (int) db.insert(DBContract.Table3.TABLE_NAME,null,values);
 
         //Assignem la relacio entre els Estudiants i l'assistència
+        boolean succes;
         if(res != -1) {
             for (String dni : dniEstudiantsPresents) {
-                if(insereixEstudiantsAssistencia(dni, res, 1)){
+                succes = insereixEstudiantsAssistencia(dni, res, 1);
+                if(!succes){
                     res = -1;
                     break;
                 }
             }
             if(res != -1) {
                 for (String dni : dniEstudiantsAbsents) {
-                    if(insereixEstudiantsAssistencia(dni, res, 0)){
+                    succes = insereixEstudiantsAssistencia(dni, res, 0);
+                    if(!succes){
                         res = -1;
                         break;
                     }
@@ -237,10 +240,8 @@ public class DBManager {
     }
     private void deleteEstudiantsAssignatura(String idAssignatura){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int res = db.delete(DBContract.Table12.TABLE_NAME,DBContract.Table12.COLUMN_NAME_COL2 + "=?",
+        db.delete(DBContract.Table12.TABLE_NAME,DBContract.Table12.COLUMN_NAME_COL2 + "=?",
                 new String[] {idAssignatura});
-
-        //db.close();
     }
 
     /* Mètode que permet eliminar totes les files d'una taula */
