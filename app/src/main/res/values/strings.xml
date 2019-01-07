@@ -25,7 +25,7 @@
     <string name="nomEstudiant">Nom Cognom1 Cognom2</string>
     <string name="dniEstudiant">00000000X</string>
     <string name="hintNomAssignatura">Nom de l\'Assignatura</string>
-    <string name="tv_matricualts">Escull alumnes dni_matriculats:</string>
+    <string name="tv_matricualts">Escull alumnes matriculats:</string>
     <string name="hintAliasAssignatura">Alias o nom simplificat</string>
     <string name="imgDesc">delete_item</string>
     <string name="tv_DataAssist">Dim 26 Des 2018 14:30:00</string>

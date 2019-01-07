@@ -65,7 +65,6 @@ public class GestioAssistencies extends AppCompatActivity {
                     el propi adapter.*/
                     break;
             }
-
         }
     }
 
