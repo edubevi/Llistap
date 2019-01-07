@@ -152,7 +152,16 @@ public class AdapterEstudiants extends RecyclerView.Adapter<AdapterEstudiants.Vi
         Collections.sort(estudiantsCopy);
     }
 
-    public int getCopyListItemIndex(Estudiant e){ return estudiantsCopy.indexOf(e); }
+    public int getCopyListItemIndex(Estudiant e){
+        int index = -1;
+        for(int i = 0; i < estudiantsCopy.size(); i++){
+            if(e.getDni().equals(estudiantsCopy.get(i).getDni())){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
     public Estudiant getItem(int index) { return estudiants.get(index); }
 }

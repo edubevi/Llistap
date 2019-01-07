@@ -84,7 +84,9 @@ public class AdapterEstudiantsAssignatura extends RecyclerView.Adapter<
         if(matriculats.size() > 0){
             /* Comprovem si el item del recyclerview correspon a un estudiant matriculat a
             l'assignatura. En cas afirmatiu, marquem el seu checkbox */
-            if((matriculats.contains(estudiant.getDni()))) holder.check.setChecked(true);
+            boolean matriculat = matriculats.contains(estudiant.getDni());
+            if(matriculat) holder.check.setChecked(true);
+            else holder.check.setChecked(false);
 
         }
     }

@@ -135,7 +135,16 @@ public class AdapterAssignatures extends RecyclerView.Adapter<
         Collections.sort(assignaturesCopy);
     }
 
-    public int getCopyListItemIndex(Assignatura a) { return assignaturesCopy.indexOf(a); }
+    public int getCopyListItemIndex(Assignatura a) {
+        int index = -1;
+        for(int i = 0; i < assignaturesCopy.size(); i++){
+            if(a.getNom().equals(assignaturesCopy.get(i).getNom())){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
     public Assignatura getItem(int index) { return assignaturas.get(index); }
 

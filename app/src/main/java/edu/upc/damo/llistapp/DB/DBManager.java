@@ -118,7 +118,7 @@ public class DBManager {
         Log.d(TAG,"inseritEstudiantAssistencia" + dniEstudiant + "-" + Integer.toString(idAssistencia) + " a "
                 + DBContract.Table13.TABLE_NAME);
 
-        return res == -1;
+        return res != -1;
     }
 
     // MÈTODES UPDATE
@@ -143,39 +143,32 @@ public class DBManager {
         Log.d(TAG,"updateEstudiant" + new_est.getDni() + "a" + DBContract.Table1.TABLE_NAME);
         return res != -1;
     }
-    public boolean updateAssignatura(Assignatura old_ass, Assignatura new_ass) {
+    public boolean updateAssignatura(String id_old_ass, Assignatura new_ass) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        long res;
 
         values.put(DBContract.Table2.COLUMN_NAME_COL1, new_ass.getNom());
         values.put(DBContract.Table2.COLUMN_NAME_COL2, new_ass.getAlias());
 
         /* Actualitzem les realacions de la taula EstudiantsAssignatura:
+
             1 - Eliminen el conjunt de files idEstudiant-idAssignatura on idAssignatura sigui el nom
             de l'assignatura old_ass. */
-        long res = db.delete(DBContract.Table12.TABLE_NAME, DBContract.Table12.COLUMN_NAME_COL2 + "=?",
-                new String[]{old_ass.getNom()});
-
-        if (res != -1){
-            //Actualitzem la Base de dades amb els nous valors nous.
-            res = db.update(DBContract.Table2.TABLE_NAME, values,
-                    DBContract.Table2.COLUMN_NAME_COL1 + "=?", new String[]{old_ass.getNom()});
-
-        }
-        /*2 - Generem les noves files amb el conjunt de relacions entre idEstudiant-idAssignatura
+        deleteEstudiantsAssignatura(id_old_ass);
+        //if(!succes) return false;
+        //  2 - Actualitzem el nom i el alias de l'assignatura.
+        res = db.update(DBContract.Table2.TABLE_NAME, values,
+                DBContract.Table2.COLUMN_NAME_COL1 + "=?", new String[] { id_old_ass });
+        if(res == -1) return false;
+        /*3 - Generem les noves files amb el conjunt de relacions entre idEstudiant-idAssignatura
         on idAssignatura sigui el nom de l'assignatura new_ass.*/
-        if (res != -1) {
-            boolean succes;
-            for (String dni : new_ass.getDni_matriculats()) {
-                succes = insereixEstudiantsAssignatura(dni, new_ass.getNom());
-                if (!succes) {
-                    res = -1;
-                    break;
-                }
-            }
+        for (String dni : new_ass.getDni_matriculats()){
+            boolean succes = insereixEstudiantsAssignatura(dni, new_ass.getNom());
+            if(!succes) return false;
         }
         Log.d(TAG, "updateEstudiant" + new_ass.getNom() + "a" + DBContract.Table1.TABLE_NAME);
-        return res != -1;
+        return true;
     }
     /* Mètode que actualitza una assistència */
     public boolean updateAssistencia(int idAssistencia, ArrayList<String> dniPresents,
@@ -205,6 +198,14 @@ public class DBManager {
                         + DBContract.Table13.COLUMN_NAME_COL2 + "=?", new String[]
                         {idEstudiant, Integer.toString(idAssistencia)} );
 
+        /* Si de la primera querie obtenim res=0 vol dir que cap fila s'ha vist afectada per l'update.
+        En aquets casos voldrà dir que estem actualitzant una fila EstudiantAssistencia que no existeix.
+        Això passa perque l'estudiant no formava part de l'assignatura en el moment de crear
+        l'assistència. Per tan cal crear aquesta fila. */
+        if(res == 0) {
+            boolean insert = insereixEstudiantsAssistencia(idEstudiant, idAssistencia, present ? 1 : 0);
+            if(!insert) res = -1;
+        }
         return res != -1;
     }
 
@@ -233,6 +234,13 @@ public class DBManager {
 
         db.close();
         return res > 0;
+    }
+    private void deleteEstudiantsAssignatura(String idAssignatura){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int res = db.delete(DBContract.Table12.TABLE_NAME,DBContract.Table12.COLUMN_NAME_COL2 + "=?",
+                new String[] {idAssignatura});
+
+        //db.close();
     }
 
     /* Mètode que permet eliminar totes les files d'una taula */
